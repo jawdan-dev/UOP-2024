@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://ds43d8ak37w2k"]
+
+[ext_resource type="Shader" path="res://Shaders/WorldShader.gdshader" id="1_5qkra"]
+[ext_resource type="Texture2D" uid="uid://dd3i3gd0yqlvk" path="res://Textures/Coin.png" id="2_ag4gr"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_5qkra")
+shader_parameter/text = ExtResource("2_ag4gr")

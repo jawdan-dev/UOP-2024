@@ -9,6 +9,7 @@
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("cameraObject")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+collision_layer = 257
 script = ExtResource("1_m82g4")
 cameraObject = NodePath("MainCamera")
 

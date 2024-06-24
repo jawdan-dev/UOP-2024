@@ -11,8 +11,14 @@ config_version=5
 [application]
 
 config/name="UoP-2024"
-run/main_scene="res://Scenes/main.tscn"
+run/main_scene="res://Scenes/Main.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
+
+[display]
+
+window/size/viewport_width=640
+window/size/viewport_height=360
+window/stretch/mode="viewport"
 
 [input]
 
@@ -67,7 +73,16 @@ player_camera_down={
 ]
 }
 
+[layer_names]
+
+3d_physics/layer_9="Collectables"
+
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/lossless_compression/force_png=true
+textures/default_filters/anisotropic_filtering_level=0
+textures/decals/filter=0
+textures/light_projectors/filter=0
