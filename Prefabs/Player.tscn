@@ -1,11 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dn0hgnaquqf5p"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_m82g4"]
+[ext_resource type="Material" uid="uid://g000t01svn6p" path="res://Materials/Player.tres" id="3_sbhip"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_qfg5b"]
-
-[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_3hrb8"]
-dof_blur_far_enabled = true
 
 [sub_resource type="SphereMesh" id="SphereMesh_c3302"]
 
@@ -19,10 +17,10 @@ shape = SubResource("SphereShape3D_qfg5b")
 
 [node name="MainCamera" type="Camera3D" parent="."]
 transform = Transform3D(-0.997282, -0.0399062, 0.0619294, 0, 0.840595, 0.541664, -0.0736733, 0.540192, -0.838311, 0, 1.06238, -1.83475)
-attributes = SubResource("CameraAttributesPractical_3hrb8")
 
 [node name="Visual" type="Node3D" parent="."]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Visual"]
+material_override = ExtResource("3_sbhip")
 mesh = SubResource("SphereMesh_c3302")
 skeleton = NodePath("../..")
