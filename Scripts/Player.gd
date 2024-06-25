@@ -1,11 +1,17 @@
 extends CharacterBody3D
 
 @export_category("Movement Properties")
+# Ground.
 @export var movementSpeed : float = 5.0;
-@export var movementJumpImpulse : float = 6.0;
+# Jump.
+@export var movementJumpImpulseMax : float = 4.0;
+@export var movementJumpImpulseMin : float = 2.0;
+@export var movementJumpHoldTimeMax : float = 0.3;
+var movementJumpHoldTimeRemaining : float = 0;
 @export var movementJumpCoyoteTime : float = 0.2;
 var movementTimeSinceLastJump : float = 0.0;
 var movementTimeSinceLastGrounded : float = 0.0;
+# Gravity.
 @export var movementGravityAcceleration : float = -9.8;
 var movementGravity : float = 0;
 
@@ -110,7 +116,20 @@ func handleGravity(delta):
 		movementTimeSinceLastGrounded < movementTimeSinceLastJump):
 		# Jump!
 		movementTimeSinceLastJump = 0.0;
-		movementGravity = movementJumpImpulse;
+		movementGravity = movementJumpImpulseMax;
+		movementJumpHoldTimeRemaining = movementJumpHoldTimeMax;
+		
+	# Handle jump hold.
+	if (movementJumpHoldTimeRemaining > 0):
+		if (Input.is_action_pressed("player_movement_jump")):
+			# Run out.
+			movementGravity = movementJumpImpulseMax
+			movementJumpHoldTimeRemaining -= delta;
+		else:
+			# Let go.
+			if (movementGravity > 0):
+				movementGravity = lerp(movementJumpImpulseMin, movementJumpImpulseMax, 1 - (movementJumpHoldTimeRemaining / movementJumpHoldTimeMax));
+			movementJumpHoldTimeRemaining = 0;		
 	
 	# Use gravity.	
 	movementGravity += gravityFactor;
