@@ -1,6 +1,12 @@
 extends CharacterBody3D
 
 @export_category("Movement Properties")
+# Momentum
+@export var movementFactorGround : float = 12;
+@export var movementFactorAir : float = 8;
+@export var movementMomentumDampeningGround : float = 16;
+@export var movementMomentumDampeningAir : float = 3;
+var movementMomentum : Vector3 = Vector3.ZERO;
 # Ground.
 @export var movementSpeed : float = 5.0;
 # Jump.
@@ -21,6 +27,11 @@ var movementGravity : float = 0;
 @export var cameraDistance : float = 2.5;
 var cameraAngle : Vector2 = Vector2.ZERO;
 
+@export_category("Combat")
+@export var combatEntitiesList : Node;
+@export_range(-1, 1) var combatLookingDotThreshold : float = 0.7;
+@export var combatEngageDistance : float = 10;
+
 @export_category("Other")
 
 func _process(delta):		
@@ -28,15 +39,18 @@ func _process(delta):
 	handleGravity(delta);
 	# Handle movement.
 	handleMovement(delta);
+	# Handle momentum.
+	handleMomentum(delta);
+	# Move!
+	var totalMovement : Vector3 = movementMomentum + verticalMovement;
+	velocity = totalMovement;	
+	move_and_slide();
 	
 	# Handle camera.
 	handleCamera(delta);
+	# Handle combat.
+	handleCombat(delta);
 	
-	# Movement.
-	var totalMovement : Vector3 = ((forwardMovement + sideMovement) * movementSpeed) + verticalMovement;
-	velocity = totalMovement;	
-	# Move!
-	move_and_slide();
 
 ################################################################################
 
@@ -67,7 +81,6 @@ func handleCamera(delta):
 			global_position
 		);
 
-
 ################################################################################
 
 var forwardMovement : Vector3;
@@ -92,6 +105,19 @@ func handleMovement(delta):
 		0,
 		-sin(cameraAngle.x)
 	) * movementInput.x;
+
+################################################################################
+
+func handleMomentum(delta):
+	# Update momentum.
+	var grounded : bool = is_on_floor();
+	var horizontalMovement : Vector3 = ((forwardMovement + sideMovement) * movementSpeed)
+	if (horizontalMovement.length_squared() > 0):
+		# Maintain.
+		movementMomentum = movementMomentum.move_toward(horizontalMovement, (movementFactorGround if grounded else movementFactorAir) * delta);
+	else:
+		# Dampen.
+		movementMomentum = movementMomentum.move_toward(Vector3.ZERO, (movementMomentumDampeningGround if grounded else movementMomentumDampeningAir) * delta)
 
 ################################################################################
 
@@ -140,4 +166,56 @@ func handleGravity(delta):
 	);
 	movementGravity += gravityFactor;
 
+################################################################################
+
+var activeCombatEntity : Node3D;
+func handleCombat(delta): 
+	# Safety first.
+	if (!combatEntitiesList || !cameraObject): return;
+	
+	# Get list of entites.
+	var entities : Array[Node] = combatEntitiesList.get_children(false)
+	
+	# Calculation variables.
+	var combatEngageDistanceSquared : float = combatEngageDistance * combatEngageDistance;
+	var lookingDirection : Vector3 = Vector3(
+		sin(cameraAngle.x) * cos(cameraAngle.y),
+		-sin(cameraAngle.y),
+		cos(cameraAngle.x) * cos(cameraAngle.y)
+	);
+	
+	# Get entity that is being looked at.
+	var bestDot : float = -1.1;
+	var bestEntity : Node3D = null;
+	for e : Node3D in entities:
+		if (!e): continue;
+		# Check distance to entity.
+		var eDifference : Vector3 = e.global_position - cameraObject.global_position;
+		if (eDifference.length_squared() > combatEngageDistanceSquared): continue;
+		# Get direction & dot to entity.
+		var eDirection : Vector3 = eDifference.normalized();
+		var eDot : float = lookingDirection.dot(eDirection)
+		
+		# Compare to best.
+		if (bestDot >= eDot && bestEntity != null): continue;
+		
+		# TODO: Raycast?
+		
+		# Set as best.
+		bestEntity = e;
+		bestDot = eDot;
+	
+	# Set active combat entity.
+	if (bestDot >= combatLookingDotThreshold):
+		activeCombatEntity = bestEntity;
+	else:
+		activeCombatEntity = null;
+		
+	# Handle lock.
+	if (!activeCombatEntity):
+		$CombatLock.visible = false;
+	else:
+		$CombatLock.visible = true;
+		$CombatLock.global_position = activeCombatEntity.global_position;
+	
 ################################################################################
