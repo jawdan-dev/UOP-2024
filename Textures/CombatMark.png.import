@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c2ccb8hymrt3y"
-path.s3tc="res://.godot/imported/CombatLock.png-8a43f0cfe7e44c0c8b59cb83042cfefb.s3tc.ctex"
+uid="uid://dlnd7p3txshqw"
+path.s3tc="res://.godot/imported/CombatMark.png-8d7db330fefe61ae31651722beaed281.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Textures/CombatLock.png"
-dest_files=["res://.godot/imported/CombatLock.png-8a43f0cfe7e44c0c8b59cb83042cfefb.s3tc.ctex"]
+source_file="res://Textures/CombatMark.png"
+dest_files=["res://.godot/imported/CombatMark.png-8d7db330fefe61ae31651722beaed281.s3tc.ctex"]
 
 [params]
 

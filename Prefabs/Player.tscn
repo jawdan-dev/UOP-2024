@@ -1,20 +1,22 @@
-[gd_scene load_steps=6 format=3 uid="uid://dn0hgnaquqf5p"]
+[gd_scene load_steps=7 format=3 uid="uid://dn0hgnaquqf5p"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_m82g4"]
-[ext_resource type="Texture2D" uid="uid://c2ccb8hymrt3y" path="res://Textures/CombatLock.png" id="3_3c1vi"]
+[ext_resource type="Texture2D" uid="uid://dlnd7p3txshqw" path="res://Textures/CombatMark.png" id="3_rd04c"]
 [ext_resource type="Material" uid="uid://g000t01svn6p" path="res://Materials/Player.tres" id="3_sbhip"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_qfg5b"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_c3302"]
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_diiu8"]
+radius = 0.6
+
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("cameraObject")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 collision_layer = 257
 script = ExtResource("1_m82g4")
 cameraObject = NodePath("MainCamera")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="EnvironmentCollider" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_qfg5b")
 
 [node name="MainCamera" type="Camera3D" parent="."]
@@ -27,11 +29,17 @@ material_override = ExtResource("3_sbhip")
 mesh = SubResource("SphereMesh_c3302")
 skeleton = NodePath("../..")
 
-[node name="CombatLock" type="Sprite3D" parent="."]
-visible = false
+[node name="HitBox" type="Area3D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitBox"]
+shape = SubResource("SphereShape3D_diiu8")
+
+[node name="CombatMark" type="Sprite3D" parent="."]
 pixel_size = 0.0063
 billboard = 1
 no_depth_test = true
 fixed_size = true
 texture_filter = 0
-texture = ExtResource("3_3c1vi")
+texture = ExtResource("3_rd04c")

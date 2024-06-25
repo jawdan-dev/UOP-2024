@@ -28,29 +28,88 @@ var movementGravity : float = 0;
 var cameraAngle : Vector2 = Vector2.ZERO;
 
 @export_category("Combat")
+# Entity target selection.
 @export var combatEntitiesList : Node;
 @export_range(-1, 1) var combatLookingDotThreshold : float = 0.7;
 @export var combatEngageDistance : float = 10;
+# Knockback.
+@export var combatKnockbackDampening : float = 8;
+var combatKnockback : Vector3 = Vector3.ZERO;
+
+# Dive attack.
+@export var combatDiveSpeed : float = 16;
+@export var combatDiveBounceImpulse : float = 8;
+@export var combatDiveMomentumImpulse : float = 5;
 
 @export_category("Other")
 
-func _process(delta):		
+enum PlayerState {
+	PlayerState_Moving, 
+	PlayerState_Combat_Diving,
+};
+
+var playerState : PlayerState = PlayerState.PlayerState_Moving;
+var hitEntity : Node3D = null;
+func _physics_process(delta):
 	# Handle gravity.
 	handleGravity(delta);
 	# Handle movement.
 	handleMovement(delta);
 	# Handle momentum.
 	handleMomentum(delta);
+	# Hanlde knockback.
+	handleKnockback(delta);
+	
+	var totalMovement : Vector3 = movementMomentum + verticalMovement + combatKnockback
+	match (playerState): 
+		PlayerState.PlayerState_Moving: 
+			# Handle combat.
+			handleCombat(delta);
+			
+			# Combat scuff.
+			if (Input.is_action_just_pressed("player_combat_dive") && activeCombatEntity != null):
+				playerState = PlayerState.PlayerState_Combat_Diving;
+				
+			# Base movement.
+			
+		PlayerState.PlayerState_Combat_Diving: 
+			if (!activeCombatEntity || is_on_floor() || is_on_wall() || is_on_ceiling()):
+				playerState = PlayerState.PlayerState_Moving;
+				pass;
+			
+			# Get target distance stuff.
+			var dif : Vector3 = activeCombatEntity.global_position - global_position;
+			var len : float = dif.length();
+			
+			# Check if tar
+			if (hitEntity):
+				# Attack finished.
+				playerState = PlayerState.PlayerState_Moving;
+				
+				# Bounce off of enemy.
+				movementGravity = combatDiveBounceImpulse;
+				var reverseAction : Vector3 = -dif.normalized() * combatDiveMomentumImpulse;
+				movementMomentum = Vector3(reverseAction.x, 0, reverseAction.z);
+				totalMovement = movementMomentum + verticalMovement + combatKnockback
+				
+				# Entity knockback.
+				hitEntity.set("combatKnockback", hitEntity.get("combatKnockback") + -reverseAction + Vector3(0, 2, 0));
+				
+				# Reset.
+				hitEntity = null;
+			else:
+				# Move towards target.
+				totalMovement = (dif / len) * combatDiveSpeed;
+	
 	# Move!
-	var totalMovement : Vector3 = movementMomentum + verticalMovement;
 	velocity = totalMovement;	
 	move_and_slide();
 	
 	# Handle camera.
 	handleCamera(delta);
-	# Handle combat.
-	handleCombat(delta);
 	
+	# Update combat mark.
+	updateCombatMark(delta);
 
 ################################################################################
 
@@ -168,10 +227,15 @@ func handleGravity(delta):
 
 ################################################################################
 
+func handleKnockback(delta): 
+	combatKnockback = combatKnockback.move_toward(Vector3.ZERO, combatKnockbackDampening * delta);
+
 var activeCombatEntity : Node3D;
 func handleCombat(delta): 
 	# Safety first.
-	if (!combatEntitiesList || !cameraObject): return;
+	if (!combatEntitiesList || !cameraObject || is_on_floor()): 
+		activeCombatEntity = null;
+		return;
 	
 	# Get list of entites.
 	var entities : Array[Node] = combatEntitiesList.get_children(false)
@@ -211,11 +275,16 @@ func handleCombat(delta):
 	else:
 		activeCombatEntity = null;
 		
-	# Handle lock.
+
+func updateCombatMark(delta):
+	# Handle mark.
 	if (!activeCombatEntity):
-		$CombatLock.visible = false;
+		$CombatMark.visible = false;
 	else:
-		$CombatLock.visible = true;
-		$CombatLock.global_position = activeCombatEntity.global_position;
-	
+		$CombatMark.visible = true;
+		$CombatMark.global_position = activeCombatEntity.global_position;
+
+func _onEntityHit(entity : Node3D):
+	hitEntity = entity;
+
 ################################################################################

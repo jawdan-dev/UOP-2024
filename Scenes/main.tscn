@@ -5,7 +5,7 @@
 [ext_resource type="Material" uid="uid://65qj6lecvxni" path="res://Materials/Default.tres" id="3_cwkxn"]
 [ext_resource type="Material" uid="uid://bswktap3wq88p" path="res://Materials/Floor.tres" id="4_ludtf"]
 [ext_resource type="PackedScene" uid="uid://tludh3giqfj8" path="res://Prefabs/Coin.tscn" id="5_2tbe5"]
-[ext_resource type="PackedScene" uid="uid://bjy6lf0dsm0m4" path="res://Prefabs/Enemy.tscn" id="6_lgxmx"]
+[ext_resource type="PackedScene" uid="uid://cl2wi0vttovcp" path="res://Prefabs/Enemies/Enemy_Anchor.tscn" id="6_6w0gh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ekbg8"]
 
@@ -25,6 +25,7 @@
 environment = ExtResource("1_82l0s")
 
 [node name="Player" parent="." node_paths=PackedStringArray("combatEntitiesList") instance=ExtResource("2_1uq5u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.713514, 0)
 combatEntitiesList = NodePath("../Enemies")
 
 [node name="Environment" type="Node" parent="."]
@@ -98,8 +99,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.84151, 0, -1.84393)
 
 [node name="Enemies" type="Node" parent="."]
 
-[node name="Enemy" parent="Enemies" instance=ExtResource("6_lgxmx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.26943, 1.06954, 3.07416)
+[node name="Anchor" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.30091, 1.09675, -3.34639)
 
-[node name="Enemy2" parent="Enemies" instance=ExtResource("6_lgxmx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.28401, 1.06954, -1.86359)
+[node name="Anchor2" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.76451, 3.84954, 2.41531)
+
+[node name="Anchor3" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.68771, 2.67792, 4.49577)

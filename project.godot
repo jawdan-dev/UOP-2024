@@ -72,9 +72,17 @@ player_camera_down={
 "events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":3,"axis_value":1.0,"script":null)
 ]
 }
+player_combat_dive={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":2,"pressure":0.0,"pressed":true,"script":null)
+]
+}
 
 [layer_names]
 
+3d_physics/layer_1="Environment"
+3d_physics/layer_2="PlayerHitBox / EnemyHurtBox"
+3d_physics/layer_3="PlayerHurtBox / EnemyHitBox"
 3d_physics/layer_9="Collectables"
 
 [rendering]
