@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cl2wi0vttovcp"]
 
-[ext_resource type="PackedScene" uid="uid://bjy6lf0dsm0m4" path="res://Prefabs/Enemies/Enemy_Base.tscn" id="1_gmnww"]
+[ext_resource type="PackedScene" uid="uid://bjy6lf0dsm0m4" path="res://Prefabs/Enemies/Base.tscn" id="1_gmnww"]
 [ext_resource type="Material" uid="uid://ciyvmkckbexs3" path="res://Materials/Enemy.tres" id="2_unl5b"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_aapki"]
@@ -11,8 +11,10 @@ radius = 0.535179
 
 [node name="Anchor" instance=ExtResource("1_gmnww")]
 collision_layer = 1
-movementGravityAcceleration = 0.0
-combatKnockbackDampening = 10000.0
+movementUseMovement = false
+movementUseGravity = false
+combatInvincible = true
+combatUseKnockback = false
 
 [node name="Mesh" type="MeshInstance3D" parent="." index="1"]
 material_override = ExtResource("2_unl5b")

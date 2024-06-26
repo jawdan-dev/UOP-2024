@@ -1,32 +1,56 @@
 extends CharacterBody3D
 
 @export_category("Movement Properties")
+# Movement.
+@export var movementUseMovement : bool = true;
 # Gravity.
+@export var movementUseGravity : bool = true;
 @export var movementGravityAcceleration : float = -9.8;
 var movementGravity : float = 0;
 
 @export_category("Combat")
+# Health.
+@export var combatInvincible : bool = false;
+@export var combatTotalHealth : int = 1;
 # Knockback.
+@export var combatUseKnockback : bool = true;
 @export var combatKnockbackDampening : float = 6;
 var combatKnockback : Vector3 = Vector3.ZERO;
 
 func _physics_process(delta):
-	# Handle gravity.
-	handleGravity(delta);
-	# Handle knockback;
-	handleKnockback(delta);
+	# Accumulate total movement.
+	var totalMovement : Vector3 = Vector3.ZERO;
 	
-	# Get default total movement.
-	var totalMovement : Vector3 = verticalMovement + combatKnockback;
+	# Handle gravity.
+	if (movementUseGravity): 
+		handleGravity(delta);
+		totalMovement += verticalMovement;
+	# Handle knockback;
+	if (combatUseKnockback): 
+		handleKnockback(delta);
+		totalMovement += combatKnockback;
 	
 	# Move!
-	velocity = totalMovement;	
-	move_and_slide();
+	if (movementUseMovement):
+		velocity = totalMovement;	
+		move_and_slide();
 	
 ################################################################################
 
 func _onPlayerHit(body : Area3D):
 	body.get_parent_node_3d().call("_onEntityHit", self);
+	
+func _onDamageHit(damage : int): 
+	if (combatInvincible): return;
+	
+	# Reduce health.
+	combatTotalHealth -= damage;
+	
+	# TODO: Texture animation based on health?
+	
+	# Destroy.
+	if (combatTotalHealth <= 0):
+		queue_free();
 
 ################################################################################
 

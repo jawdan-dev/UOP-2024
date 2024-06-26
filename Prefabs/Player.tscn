@@ -1,10 +1,9 @@
-[gd_scene load_steps=20 format=3 uid="uid://dn0hgnaquqf5p"]
+[gd_scene load_steps=19 format=3 uid="uid://dn0hgnaquqf5p"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_m82g4"]
 [ext_resource type="Material" uid="uid://ccb67kigpcsid" path="res://Materials/Player.tres" id="2_348gg"]
 [ext_resource type="Material" uid="uid://djf2heslo2vew" path="res://Materials/Air.tres" id="3_n3kvv"]
 [ext_resource type="Texture2D" uid="uid://dlnd7p3txshqw" path="res://Textures/CombatMark.png" id="3_rd04c"]
-[ext_resource type="Material" uid="uid://g000t01svn6p" path="res://Materials/Player_OLD.tres" id="4_os4ti"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_qfg5b"]
 radius = 0.4
@@ -941,7 +940,7 @@ _data = {
 [sub_resource type="SphereMesh" id="SphereMesh_c3302"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_diiu8"]
-radius = 0.6
+radius = 0.425972
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("animationOrigin", "animationPlayer", "animationAirObject")]
 collision_layer = 257
@@ -1196,7 +1195,6 @@ libraries = {
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Visual"]
 visible = false
-material_override = ExtResource("4_os4ti")
 mesh = SubResource("SphereMesh_c3302")
 skeleton = NodePath("../..")
 

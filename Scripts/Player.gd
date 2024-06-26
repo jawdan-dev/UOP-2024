@@ -120,6 +120,7 @@ func _physics_process(delta):
 				
 				# Entity knockback.
 				hitEntity.set("combatKnockback", hitEntity.get("combatKnockback") + -reverseAction + Vector3(0, 2, 0));
+				hitEntity.call("_onDamageHit", 1);
 				
 				# Reset.
 				hitEntity = null;
