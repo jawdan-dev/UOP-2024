@@ -22,7 +22,8 @@ var movementTimeSinceLastGrounded : float = 0.0;
 var movementGravity : float = 0;
 
 @export_category("Camera Properties")
-@export var cameraObject : Camera3D;
+@onready var cameraObject : Camera3D = $MainCamera;
+@export var cameraTargetOffset : Vector3 = Vector3.ZERO;
 @export var cameraLookSpeed : float = 2.0;
 @export var cameraDistance : float = 2.5;
 var cameraAngle : Vector2 = Vector2.ZERO;
@@ -42,6 +43,9 @@ var combatKnockback : Vector3 = Vector3.ZERO;
 @export var combatDiveMomentumImpulse : float = 5;
 
 @export_category("Other")
+@export var animationOrigin : Node3D;
+@export var animationPlayer : AnimationPlayer;
+@export var animationAirObject : Node3D;
 
 enum PlayerState {
 	PlayerState_Moving, 
@@ -70,7 +74,24 @@ func _physics_process(delta):
 			if (Input.is_action_just_pressed("player_combat_dive") && activeCombatEntity != null):
 				playerState = PlayerState.PlayerState_Combat_Diving;
 				
-			# Base movement.
+			# Rotate towards momentum.
+			if (animationOrigin): animationOrigin.look_at(animationOrigin.global_position - movementMomentum);
+			# Base animation.
+			if (verticalMovement.y != 0):
+				playAnimation("Air");
+				setAnimationPercentage( \
+					 clamp(remap(verticalMovement.y, 10.0, -10.0, 0.0, 1.0), 0.0, 1.0)
+				);
+			elif (movementMomentum.length_squared() > 0):
+				playAnimation("Running");
+				# Set run animation speed based on movement speed.
+				setAnimationSpeed(movementMomentum.length() / movementSpeed);
+			else:
+				playAnimation("Idle");
+				
+
+			# Hide air.	
+			if (animationAirObject && animationAirObject.visible): animationAirObject.visible = false;
 			
 		PlayerState.PlayerState_Combat_Diving: 
 			if (!activeCombatEntity || is_on_floor() || is_on_wall() || is_on_ceiling()):
@@ -80,6 +101,11 @@ func _physics_process(delta):
 			# Get target distance stuff.
 			var dif : Vector3 = activeCombatEntity.global_position - global_position;
 			var len : float = dif.length();
+			
+			# Play dive animation.
+			playAnimation("Dive");
+			if (animationAirObject && !animationAirObject.visible): animationAirObject.visible = true;
+			if (animationOrigin): animationOrigin.look_at(animationOrigin.global_position - (activeCombatEntity.global_position - animationOrigin.global_position));
 			
 			# Check if tar
 			if (hitEntity):
@@ -131,13 +157,13 @@ func handleCamera(delta):
 	if (cameraObject): 
 		cameraObject.look_at_from_position(
 			# Camera location.
-			global_position + Vector3(
+			global_position + cameraTargetOffset + Vector3(
 				-sin(cameraAngle.x) * cos(cameraAngle.y),
 				sin(cameraAngle.y),
 				-cos(cameraAngle.x) * cos(cameraAngle.y)
 			) * cameraDistance,
 			# Target object.
-			global_position
+			global_position + cameraTargetOffset
 		);
 
 ################################################################################
@@ -288,3 +314,42 @@ func _onEntityHit(entity : Node3D):
 	hitEntity = entity;
 
 ################################################################################
+
+func playAnimation(animation : String):
+	# Safety first.
+	if (!animationPlayer || !animationPlayer.has_animation(animation)): 
+		return;	
+	
+	# Set new animation if not already set.
+	if (animationPlayer.get_current_animation() == animation): return;
+	animationPlayer.set_current_animation(animation);
+		
+	# Make sure the animation starts playing.
+	if (!animationPlayer.is_playing()):
+		animationPlayer.play();
+	
+	# Reset speed scale.
+	animationPlayer.speed_scale = 1.0;
+
+func setAnimationPercentage(percentage : float):
+	# Safety first.
+	if (!animationPlayer): 
+		return;
+	
+	# Make sure the animation is paused.
+	if (animationPlayer.is_playing()):
+		animationPlayer.pause();
+	
+	# Set animation percentage.
+	animationPlayer.seek(percentage * animationPlayer.current_animation_length);
+	
+func setAnimationSpeed(percentage : float):
+	# Safety first.
+	if (!animationPlayer): 
+		return;
+		
+	# Set speed scale.
+	animationPlayer.speed_scale = percentage;
+	
+################################################################################
+	

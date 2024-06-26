@@ -1,5 +1,9 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://g000t01svn6p"]
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://ccb67kigpcsid"]
+
+[ext_resource type="Shader" path="res://Shaders/WorldShader.gdshader" id="1_wic88"]
+[ext_resource type="Texture2D" uid="uid://cyxec0mix8t6t" path="res://Textures/Player.png" id="2_ss642"]
 
 [resource]
-shading_mode = 0
-albedo_color = Color(0.89, 0.3382, 0.512937, 1)
+render_priority = 0
+shader = ExtResource("1_wic88")
+shader_parameter/text = ExtResource("2_ss642")

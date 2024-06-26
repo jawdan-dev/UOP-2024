@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://djf2heslo2vew"]
+
+[ext_resource type="Shader" path="res://Shaders/WorldTransparentShader.gdshader" id="1_qwa57"]
+[ext_resource type="Texture2D" uid="uid://d16j8cu0lxsl" path="res://Textures/Air.png" id="2_14kmx"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_qwa57")
+shader_parameter/text = ExtResource("2_14kmx")
