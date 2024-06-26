@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://c7v3na7gqrky5"]
+
+[ext_resource type="Material" uid="uid://cvcnwhrpeiidq" path="res://Materials/Rough.tres" id="1_hdiaa"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_60kxt"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_0rwcb"]
+_surfaces = [{
+"aabb": AABB(-4, 0.025, -4, 8, 1.00005e-05, 8.00001),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 3, 0, 1, 0, 0, 0, 2, 0, 3, 0),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 254, 255, 0, 0, 255, 255, 0, 0, 254, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_c6ihe"]
+resource_name = "Decal_Plane_004"
+_surfaces = [{
+"aabb": AABB(-4, 0.025, -4, 8, 1.00005e-05, 8.00001),
+"attribute_data": PackedByteArray(255, 255, 255, 127, 255, 127, 255, 127, 254, 255, 255, 255, 255, 127, 254, 255),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 3, 0, 1, 0, 0, 0, 2, 0, 3, 0),
+"material": SubResource("StandardMaterial3D_60kxt"),
+"primitive": 3,
+"uv_scale": Vector4(2, 2, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 254, 255, 255, 255, 255, 255, 0, 0, 254, 255, 255, 255, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 127, 255, 191, 255, 127, 255, 191, 255, 127, 255, 191, 255, 127, 255, 191)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_0rwcb")
+
+[node name="Rough" type="Node3D"]
+
+[node name="Plane" type="MeshInstance3D" parent="."]
+mesh = SubResource("ArrayMesh_c6ihe")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("1_hdiaa")

@@ -42,15 +42,22 @@ var combatKnockback : Vector3 = Vector3.ZERO;
 @export var combatDiveBounceImpulse : float = 8;
 @export var combatDiveMomentumImpulse : float = 5;
 
-@export_category("Other")
+@export_category("Animation")
 @export var animationOrigin : Node3D;
 @export var animationPlayer : AnimationPlayer;
 @export var animationAirObject : Node3D;
+
+@export_category("Other")
+@export var resetPoints : Node;
 
 enum PlayerState {
 	PlayerState_Moving, 
 	PlayerState_Combat_Diving,
 };
+
+func _ready():
+	for rp in resetPoints.get_children():
+		rp.visible = false;	
 
 var playerState : PlayerState = PlayerState.PlayerState_Moving;
 var hitEntity : Node3D = null;
@@ -73,6 +80,7 @@ func _physics_process(delta):
 			# Combat scuff.
 			if (Input.is_action_just_pressed("player_combat_dive") && activeCombatEntity != null):
 				playerState = PlayerState.PlayerState_Combat_Diving;
+				hitEntity = null;
 				
 			# Rotate towards momentum.
 			if (animationOrigin): animationOrigin.look_at(animationOrigin.global_position - movementMomentum);
@@ -80,7 +88,7 @@ func _physics_process(delta):
 			if (verticalMovement.y != 0):
 				playAnimation("Air");
 				setAnimationPercentage( \
-					 clamp(remap(verticalMovement.y, 10.0, -10.0, 0.0, 1.0), 0.0, 1.0)
+					 clamp(remap(verticalMovement.y, movementJumpImpulseMax + 2.0, -10.0, 0.0, 1.0), 0.0, 1.0)
 				);
 			elif (movementMomentum.length_squared() > 0):
 				playAnimation("Running");
@@ -94,9 +102,9 @@ func _physics_process(delta):
 			if (animationAirObject && animationAirObject.visible): animationAirObject.visible = false;
 			
 		PlayerState.PlayerState_Combat_Diving: 
-			if (!activeCombatEntity || is_on_floor() || is_on_wall() || is_on_ceiling()):
+			if (!activeCombatEntity):
 				playerState = PlayerState.PlayerState_Moving;
-				pass;
+				return;
 			
 			# Get target distance stuff.
 			var dif : Vector3 = activeCombatEntity.global_position - global_position;
@@ -124,6 +132,8 @@ func _physics_process(delta):
 				
 				# Reset.
 				hitEntity = null;
+			elif (is_on_floor() || is_on_wall() || is_on_ceiling()):
+				playerState = PlayerState.PlayerState_Moving;
 			else:
 				# Move towards target.
 				totalMovement = (dif / len) * combatDiveSpeed;
@@ -137,6 +147,10 @@ func _physics_process(delta):
 	
 	# Update combat mark.
 	updateCombatMark(delta);
+
+	# Manual player reset.
+	if (Input.is_action_just_pressed("player_reset")):
+		resetPlayer();
 
 ################################################################################
 
@@ -342,7 +356,7 @@ func setAnimationPercentage(percentage : float):
 		animationPlayer.pause();
 	
 	# Set animation percentage.
-	animationPlayer.seek(percentage * animationPlayer.current_animation_length);
+	animationPlayer.seek(percentage * animationPlayer.current_animation_length * 0.98);
 	
 func setAnimationSpeed(percentage : float):
 	# Safety first.
@@ -354,3 +368,23 @@ func setAnimationSpeed(percentage : float):
 	
 ################################################################################
 	
+func resetPlayer():
+	# TODO: Deal damage here.
+	
+	# Find closest reset point.
+	if (!resetPoints): return; # Handle this case?
+	
+	var bestDist : float = INF;
+	var bestPoint : Node3D = null;
+	for rp in resetPoints.get_children():
+		var point = rp as Node3D;
+		if (!point): continue;
+		var dist = point.global_position.distance_to(global_position);
+		if (!bestPoint || dist < bestDist):
+			bestPoint = point;
+			bestDist = dist;
+	
+	if (bestPoint):
+		global_position = bestPoint.global_position;
+
+################################################################################

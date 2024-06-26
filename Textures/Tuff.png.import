@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://hifqcabfopkd"
-path="res://.godot/imported/CombatMark.png-8d7db330fefe61ae31651722beaed281.ctex"
+uid="uid://b66jnfv0mimpr"
+path="res://.godot/imported/Tuff.png-cd84b976c3eb2ebcccae7f55d87577d7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/CombatMark.png"
-dest_files=["res://.godot/imported/CombatMark.png-8d7db330fefe61ae31651722beaed281.ctex"]
+source_file="res://Textures/Tuff.png"
+dest_files=["res://.godot/imported/Tuff.png-cd84b976c3eb2ebcccae7f55d87577d7.ctex"]
 
 [params]
 

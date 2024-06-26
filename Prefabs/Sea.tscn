@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3 uid="uid://byka7yi21wqgr"]
+
+[ext_resource type="Material" uid="uid://cnys1exuafum6" path="res://Materials/Sea.tres" id="1_gs34u"]
+[ext_resource type="Script" path="res://Scripts/Sea.gd" id="1_vw8nn"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_vgn55"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_60kxt"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_0rwcb"]
+_surfaces = [{
+"aabb": AABB(-4, 0.025, -4, 8, 1.00005e-05, 8.00001),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 3, 0, 1, 0, 0, 0, 2, 0, 3, 0),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 254, 255, 0, 0, 255, 255, 0, 0, 254, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_c6ihe"]
+resource_name = "Decal_Plane_004"
+_surfaces = [{
+"aabb": AABB(-4, 0.025, -4, 8, 1.00005e-05, 8.00001),
+"attribute_data": PackedByteArray(255, 255, 255, 127, 255, 127, 255, 127, 254, 255, 255, 255, 255, 127, 254, 255),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 3, 0, 1, 0, 0, 0, 2, 0, 3, 0),
+"material": SubResource("StandardMaterial3D_60kxt"),
+"primitive": 3,
+"uv_scale": Vector4(2, 2, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 254, 255, 255, 255, 255, 255, 0, 0, 254, 255, 255, 255, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 127, 255, 191, 255, 127, 255, 191, 255, 127, 255, 191, 255, 127, 255, 191)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_0rwcb")
+
+[node name="Sea" type="Area3D"]
+script = ExtResource("1_vw8nn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("WorldBoundaryShape3D_vgn55")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0)
+mesh = SubResource("ArrayMesh_c6ihe")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("1_gs34u")
+
+[connection signal="body_entered" from="." to="." method="_onPlayerHit"]

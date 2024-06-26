@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cnys1exuafum6"]
+
+[ext_resource type="Shader" path="res://Shaders/Sea.gdshader" id="1_dxlag"]
+[ext_resource type="Texture2D" uid="uid://d265ock8opl1f" path="res://Textures/Sea.png" id="2_7bnah"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_dxlag")
+shader_parameter/foamScale = 20.0
+shader_parameter/timeScale = 0.5
+shader_parameter/waterColor = Vector3(0, 0, 1)
+shader_parameter/foamColor = Vector3(1, 1, 1)
+shader_parameter/foamShape = ExtResource("2_7bnah")

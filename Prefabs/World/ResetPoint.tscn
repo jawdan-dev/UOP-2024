@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dysbcmeon7mvc"]
+
+[ext_resource type="Material" uid="uid://djf2heslo2vew" path="res://Materials/Air.tres" id="1_4qdpe"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_srplj"]
+
+[node name="ResetPoint" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_srplj")
+surface_material_override/0 = ExtResource("1_4qdpe")

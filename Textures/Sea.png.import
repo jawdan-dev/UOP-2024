@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://hifqcabfopkd"
-path="res://.godot/imported/CombatMark.png-8d7db330fefe61ae31651722beaed281.ctex"
+uid="uid://d265ock8opl1f"
+path="res://.godot/imported/Sea.png-d29a6ac1487b844ac9c95608cbb3421d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/CombatMark.png"
-dest_files=["res://.godot/imported/CombatMark.png-8d7db330fefe61ae31651722beaed281.ctex"]
+source_file="res://Textures/Sea.png"
+dest_files=["res://.godot/imported/Sea.png-d29a6ac1487b844ac9c95608cbb3421d.ctex"]
 
 [params]
 

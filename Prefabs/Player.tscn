@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_m82g4"]
 [ext_resource type="Material" uid="uid://ccb67kigpcsid" path="res://Materials/Player.tres" id="2_348gg"]
 [ext_resource type="Material" uid="uid://djf2heslo2vew" path="res://Materials/Air.tres" id="3_n3kvv"]
-[ext_resource type="Texture2D" uid="uid://dlnd7p3txshqw" path="res://Textures/CombatMark.png" id="3_rd04c"]
+[ext_resource type="Texture2D" uid="uid://hifqcabfopkd" path="res://Textures/CombatMark.png" id="3_rd04c"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_qfg5b"]
 radius = 0.4
@@ -940,7 +940,7 @@ _data = {
 [sub_resource type="SphereMesh" id="SphereMesh_c3302"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_diiu8"]
-radius = 0.425972
+radius = 0.444589
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("animationOrigin", "animationPlayer", "animationAirObject")]
 collision_layer = 257
