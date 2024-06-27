@@ -6,8 +6,8 @@
 [sub_resource type="SphereMesh" id="SphereMesh_aapki"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_kf5r6"]
-height = 1.10923
-radius = 0.535179
+height = 1.79465
+radius = 0.559767
 
 [node name="Anchor" instance=ExtResource("1_gmnww")]
 collision_layer = 1
@@ -26,5 +26,5 @@ collision_layer = 2
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0271034, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.421776, 0)
 shape = SubResource("CylinderShape3D_kf5r6")

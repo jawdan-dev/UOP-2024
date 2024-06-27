@@ -955,10 +955,6 @@ iFrameMesh = NodePath("Visual/Player/Armature/Skeleton3D/Dragon")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("SphereShape3D_qfg5b")
 
-[node name="MainCamera" type="Camera3D" parent="."]
-transform = Transform3D(-0.997282, -0.0399062, 0.0619294, 0, 0.840595, 0.541664, -0.0736733, 0.540192, -0.838311, 0, 1.06238, -1.83475)
-current = true
-
 [node name="Visual" type="Node3D" parent="."]
 
 [node name="Player" type="Node3D" parent="Visual"]

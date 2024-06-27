@@ -8,7 +8,7 @@ uniform float iFrameFlashRate = 4.0;
 
 void fragment() {
 	vec4 texCol = texture(text, UV);
-	vec3 col = mix(texCol.rgb, iFrameColor, sin(TIME * iFrameFlashRate * TAU) * 0.5);
+	vec3 col = mix(texCol.rgb, iFrameColor, (-cos(TIME * iFrameFlashRate * TAU) + 1.0) * 0.5 * 0.7);
 	if (texCol.a < 0.1f) discard;
 	ALBEDO.rgb = col;
 }

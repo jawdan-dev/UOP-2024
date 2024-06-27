@@ -22,11 +22,11 @@ var movementTimeSinceLastGrounded : float = 0.0;
 var movementGravity : float = 0;
 
 @export_category("Camera Properties")
-@onready var cameraObject : Camera3D = $MainCamera;
+@export var cameraObject : Node3D;
 @export var cameraTargetOffset : Vector3 = Vector3.ZERO;
 @export var cameraLookSpeed : float = 2.0;
 @export var cameraDistance : float = 2.5;
-var cameraAngle : Vector2 = Vector2(TAU * 0.5, 0);
+var cameraAngle : Vector2 = Vector2(TAU * 0.5, TAU * 0.1);
 
 @export_category("Combat")
 # Entity target selection.
@@ -67,6 +67,10 @@ func _ready():
 var playerState : PlayerState = PlayerState.PlayerState_Moving;
 
 func _physics_process(delta):
+	# Game's paused, stop.
+	setAnimationPaused(GameState.gamePaused);
+	if (GameState.gamePaused): return;
+		
 	# Handle gravity.
 	handleGravity(delta);
 	# Handle movement.
@@ -156,15 +160,14 @@ func _physics_process(delta):
 				
 				# Bounce off of enemy.
 				movementGravity = combatDiveBounceImpulse;
-				var reverseAction : Vector3 = -dif.normalized() * combatDiveMomentumImpulse;
-				movementMomentum = Vector3(reverseAction.x, 0, reverseAction.z);
+				var reverseAction : Vector3 = -dif.normalized();
+				movementMomentum = Vector3(reverseAction.x, 0, reverseAction.z) * combatDiveMomentumImpulse;
 				totalMovement = movementMomentum + verticalMovement + combatKnockback
 				
 				
 				# Entity knockback.
-				hitEntity.set("combatKnockback", hitEntity.get("combatKnockback") + -reverseAction + Vector3(0, 2, 0));
+				hitEntity.set("combatKnockback", hitEntity.get("combatKnockback") + -(Vector3(reverseAction.x, 0, reverseAction.z).normalized() * combatDiveMomentumImpulse) + Vector3(0, 2, 0));
 				hitEntity.call("_onDamageHit", 1);
-				
 			else:
 				if (entityIgnoreGround && entityIgnoreGroundCooldown - delta < 0):
 					playerState = PlayerState.PlayerState_Moving;
@@ -224,6 +227,8 @@ func handleIFrames(delta):
 ################################################################################
 
 func handleCamera(delta):
+	if (!GameState.gameActive): return;
+	
 	# Get player input.
 	var cameraInput : Vector2 = Vector2(
 		Input.get_axis("player_camera_right", "player_camera_left"),
@@ -255,12 +260,17 @@ func handleCamera(delta):
 var forwardMovement : Vector3;
 var sideMovement : Vector3;
 func handleMovement(delta):
+	if (!GameState.gameActive):
+		forwardMovement = Vector3.ZERO;
+		sideMovement = Vector3.ZERO;
+		return;
+		
 	# Get player input.
 	var movementInput : Vector2 = Vector2(
 		Input.get_axis("player_movement_rightward", "player_movement_leftward"),
 		Input.get_axis("player_movement_backward", "player_movement_forward")
 	);
-	
+
 	# Handle forward movement.
 	forwardMovement = Vector3(
 		sin(cameraAngle.x),
@@ -377,7 +387,8 @@ func handleCombat(delta):
 		var eDot : float = lookingDirection.dot(eDirection)
 		
 		# Compare to best.
-		if (bestDot >= eDot && bestEntity != null): continue;
+		if ((bestDot >= eDot && bestEntity != null) || \
+			e.get("iFrameTimeRemaining") > 0.0): continue;
 		
 		# TODO: Raycast?
 		
@@ -439,6 +450,15 @@ func playAnimation(animation : String):
 	# Reset speed scale.
 	animationPlayer.speed_scale = 1.0;
 
+func setAnimationPaused(paused : bool):
+	# Safety first.
+	if (!animationPlayer): return; 
+	
+	if (paused && animationPlayer.is_playing()):
+		animationPlayer.pause();
+	elif (!paused && !animationPlayer.is_playing()):
+		animationPlayer.play();
+		
 func setAnimationPercentage(percentage : float):
 	# Safety first.
 	if (!animationPlayer): 

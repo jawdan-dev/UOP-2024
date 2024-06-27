@@ -34,10 +34,29 @@ var combatKnockback : Vector3 = Vector3.ZERO;
 enum EntityType {
 	EntityType_None,
 	
+	EntityType_Sign,
 	EntityType_Mushroom,	
 };
 
+@export var signText : String = ""; 
+func _ready():
+	match (entityType):
+		EntityType.EntityType_Sign:
+			$Popup/Panel/Label.text = signText.replace("\\n", "\n");
+	# signText = "";
+
 func _physics_process(delta):
+	match (entityType):
+		EntityType.EntityType_Sign:
+			if (GameState.gamePaused && $Popup.visible && \
+				(Input.is_action_just_pressed("player_combat_dive") || Input.is_action_just_pressed("player_movement_jump"))):
+				GameState.gamePaused = false;
+				$Popup.visible = false;
+				
+	# Game's paused, stop.
+	setAnimationPaused(GameState.gamePaused);
+	if (GameState.gamePaused): return;
+	
 	# Accumulate total movement.
 	var totalMovement : Vector3 = Vector3.ZERO;
 	
@@ -55,30 +74,31 @@ func _physics_process(delta):
 	totalMovement += movementMomentum;
 	
 	# Handle entity brain.
-	if (entityTarget):
-		var targetDistance : float = global_position.distance_to(entityTarget.global_position);
-		match (entityType):
-			EntityType.EntityType_Mushroom:
-				if (targetDistance < 12.0):
-					horizontalMovement = global_position.direction_to(entityTarget.global_position) * movementSpeed;
-					horizontalMovement.y = 0;
-				else:
-					horizontalMovement = Vector3.ZERO;
-					
-				if (combatTotalHealth <= 0):
-					# Sit.
-					playAnimation("Mushroom_Fell");
-					horizontalMovement = Vector3.ZERO;
-				elif (iFrameTimeRemaining > 0):
-					# Ouchies.
-					playAnimation("Mushroom_Fell");					
-					horizontalMovement = Vector3.ZERO;
-				elif (movementMomentum.length_squared() > 0):
-					# Running.
-					playAnimation("Mushroom_Running");
-				else:
-					# Idle.
-					playAnimation("Mushroom_Idle");
+	var targetDistance : float = \
+		global_position.distance_to(entityTarget.global_position) if (entityTarget) else INF;
+		
+	match (entityType):
+		EntityType.EntityType_Mushroom:
+			if (targetDistance < 12.0):
+				horizontalMovement = global_position.direction_to(entityTarget.global_position) * movementSpeed;
+				horizontalMovement.y = 0;
+			else:
+				horizontalMovement = Vector3.ZERO;
+				
+			if (combatTotalHealth <= 0):
+				# Sit.
+				playAnimation("Mushroom_Fell");
+				horizontalMovement = Vector3.ZERO;
+			elif (iFrameTimeRemaining > 0):
+				# Ouchies.
+				playAnimation("Mushroom_Fell");					
+				horizontalMovement = Vector3.ZERO;
+			elif (movementMomentum.length_squared() > 0):
+				# Running.
+				playAnimation("Mushroom_Running");
+			else:
+				# Idle.
+				playAnimation("Mushroom_Idle");
 	
 	if (animationOrigin && movementMomentum.length_squared() > 0): 
 		animationOrigin.look_at(animationOrigin.global_position - movementMomentum);
@@ -94,6 +114,11 @@ func _physics_process(delta):
 ################################################################################
 
 func _onDamageHit(damage : int): 
+	match (entityType):
+		EntityType.EntityType_Sign:
+			GameState.gamePaused = true;
+			$Popup.visible = true;
+	
 	if (combatInvincible || iFrameTimeRemaining > 0.0): return;
 	
 	# Reduce health.
@@ -191,6 +216,15 @@ func playAnimation(animation : String):
 	
 	# Reset speed scale.
 	animationPlayer.speed_scale = 1.0;
+	
+func setAnimationPaused(paused : bool):
+	# Safety first.
+	if (!animationPlayer): return; 
+	
+	if (paused && animationPlayer.is_playing()):
+		animationPlayer.pause();
+	elif (!paused && !animationPlayer.is_playing()):
+		animationPlayer.play();
 
 func setAnimationPercentage(percentage : float):
 	# Safety first.

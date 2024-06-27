@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dwypdlb3papsb"]
+
+[ext_resource type="Shader" path="res://Shaders/WorldShader.gdshader" id="1_ttuxh"]
+[ext_resource type="Texture2D" uid="uid://culebflhh4l3" path="res://Textures/Sign.png" id="2_u54bf"]
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_ttuxh")
+shader_parameter/text = ExtResource("2_u54bf")

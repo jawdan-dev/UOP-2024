@@ -19,6 +19,9 @@ func _ready():
 
 var collectionProgress : float = 0.0;
 func _process(delta):
+	# Game's paused, stop.
+	if (GameState.gamePaused): return;
+	
 	# Update t.
 	t += delta;
 	

@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dd4ox6hn7etul"]
+
+[ext_resource type="Shader" path="res://Shaders/WorldTransparentShader.gdshader" id="1_klqqi"]
+[ext_resource type="Texture2D" uid="uid://dd3i3gd0yqlvk" path="res://Textures/Coin.png" id="2_ed86m"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_klqqi")
+shader_parameter/text = ExtResource("2_ed86m")

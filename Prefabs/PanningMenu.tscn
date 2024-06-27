@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://i0bq7lqkmlwi"]
-
-[ext_resource type="Script" path="res://Scripts/PanningMenu.gd" id="1_xa1ef"]
-
-[node name="PanningMenu" type="Node3D"]
-script = ExtResource("1_xa1ef")
-
-[node name="PanningCamera" type="Camera3D" parent="."]
-transform = Transform3D(-0.992546, -0.0520818, 0.11018, 0.00653745, 0.880027, 0.474878, -0.121694, 0.472059, -0.873127, 0, 33.6517, -61.4599)

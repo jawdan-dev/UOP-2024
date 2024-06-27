@@ -1,12 +1,14 @@
-[gd_scene load_steps=11 format=3 uid="uid://qtc4v6o55otl"]
+[gd_scene load_steps=13 format=3 uid="uid://qtc4v6o55otl"]
 
 [ext_resource type="Environment" uid="uid://crsf8smolp8au" path="res://Environments/Main.tres" id="1_82l0s"]
 [ext_resource type="PackedScene" uid="uid://dn0hgnaquqf5p" path="res://Prefabs/Player.tscn" id="2_1uq5u"]
-[ext_resource type="PackedScene" uid="uid://i0bq7lqkmlwi" path="res://Prefabs/PanningMenu.tscn" id="3_a8bdd"]
+[ext_resource type="PackedScene" uid="uid://i0bq7lqkmlwi" path="res://Prefabs/MenuHandler.tscn" id="3_cygst"]
 [ext_resource type="PackedScene" uid="uid://byka7yi21wqgr" path="res://Prefabs/Sea.tscn" id="3_skm36"]
-[ext_resource type="PackedScene" uid="uid://criidol8ceupp" path="res://Prefabs/World/Fence.tscn" id="4_px5de"]
 [ext_resource type="PackedScene" uid="uid://cl2wi0vttovcp" path="res://Prefabs/Enemies/Anchor.tscn" id="6_6w0gh"]
 [ext_resource type="PackedScene" uid="uid://bibf351mxdkt2" path="res://Prefabs/Enemies/Cobble.tscn" id="7_6je5k"]
+[ext_resource type="PackedScene" uid="uid://hah66rs0h6u1" path="res://Prefabs/Enemies/Sign.tscn" id="11_djw4k"]
+[ext_resource type="PackedScene" uid="uid://8busimn6y5ti" path="res://Prefabs/World/Teleporter.tscn" id="11_t553c"]
+[ext_resource type="PackedScene" uid="uid://bjy6lf0dsm0m4" path="res://Prefabs/Enemies/Base.tscn" id="11_xtaxp"]
 [ext_resource type="PackedScene" uid="uid://dysbcmeon7mvc" path="res://Prefabs/World/ResetPoint.tscn" id="13_8ajip"]
 [ext_resource type="PackedScene" uid="uid://ddlju2aqixo8b" path="res://Prefabs/Enemies/Mushroom.tscn" id="13_bdfe3"]
 [ext_resource type="PackedScene" uid="uid://c7m7jysvmhf54" path="res://Prefabs/World/Island.tscn" id="14_xmxhe"]
@@ -16,13 +18,22 @@
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("1_82l0s")
 
-[node name="Player" parent="." node_paths=PackedStringArray("combatEntitiesList", "resetPoints") instance=ExtResource("2_1uq5u")]
+[node name="MainCamera" type="Camera3D" parent="."]
+transform = Transform3D(-0.997282, -0.0399062, 0.0619294, 0, 0.840595, 0.541664, -0.0736733, 0.540192, -0.838311, 0, 1.06238, -1.83475)
+current = true
+
+[node name="Player" parent="." node_paths=PackedStringArray("cameraObject", "combatEntitiesList", "resetPoints") instance=ExtResource("2_1uq5u")]
 transform = Transform3D(-0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, -0.965926, 13, 18, -5)
+cameraObject = NodePath("../PlayerCamera")
 combatEntitiesList = NodePath("../Enemies")
 resetPoints = NodePath("../ResetPoints")
 
-[node name="PanningMenu" parent="." instance=ExtResource("3_a8bdd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21.9159, 0)
+[node name="PlayerCamera" type="Node3D" parent="."]
+
+[node name="MenuHandler" parent="." node_paths=PackedStringArray("cameraObject", "cameraObjectB") instance=ExtResource("3_cygst")]
+cameraObject = NodePath("../MainCamera")
+cameraObjectB = NodePath("../PlayerCamera")
+lerpCamera = true
 
 [node name="Environment" type="Node" parent="."]
 
@@ -33,46 +44,18 @@ metadata/_edit_lock_ = true
 [node name="Island" parent="Environment" instance=ExtResource("14_xmxhe")]
 metadata/_edit_lock_ = true
 
-[node name="Fighting_Fence" parent="Environment/Island" instance=ExtResource("4_px5de")]
-transform = Transform3D(0.983102, 0, 0.183059, 0, 1, 0, -0.183059, 0, 0.983102, -7.29957, 23, -26.4901)
-
-[node name="Fighting_Fence2" parent="Environment/Island" instance=ExtResource("4_px5de")]
-transform = Transform3D(0.983102, 0, 0.183059, 0, 1, 0, -0.183059, 0, 0.983102, -9.26578, 23, -26.124)
-
-[node name="Fighting_Fence5" parent="Environment/Island" instance=ExtResource("4_px5de")]
-transform = Transform3D(0.98298, 0, -0.183711, 0, 1, 0, 0.183711, 0, 0.98298, -3.37435, 23, -26.1233)
-
-[node name="Fighting_Fence6" parent="Environment/Island" instance=ExtResource("4_px5de")]
-transform = Transform3D(0.98298, 0, -0.183711, 0, 1, 0, 0.183711, 0, 0.98298, -5.34031, 23, -26.4907)
-
-[node name="Fighting_Fence3" parent="Environment/Island" instance=ExtResource("4_px5de")]
-transform = Transform3D(0.823007, 0, 0.56803, 0, 1, 0, -0.56803, 0, 0.823007, -11.0752, 23, -25.3924)
-
-[node name="Fighting_Fence4" parent="Environment/Island" instance=ExtResource("4_px5de")]
-transform = Transform3D(0.823007, 0, 0.56803, 0, 1, 0, -0.56803, 0, 0.823007, -12.7212, 23, -24.2563)
-
-[node name="Starting_Fence7" parent="Environment/Island" instance=ExtResource("4_px5de")]
-transform = Transform3D(0.513646, 0, 0.858002, 0, 1, 0, -0.858002, 0, 0.513646, 5.69812, 17, -12.3037)
-
-[node name="Starting_Fence8" parent="Environment/Island" instance=ExtResource("4_px5de")]
-transform = Transform3D(0.513646, 0, 0.858002, 0, 1, 0, -0.858002, 0, 0.513646, 4.67081, 17, -10.5877)
-
-[node name="Starting_Fence9" parent="Environment/Island" instance=ExtResource("4_px5de")]
-transform = Transform3D(0.788451, 0, 0.615097, 0, 1, 0, -0.615097, 0, 0.788451, 8.57161, 17, -15.0028)
-
-[node name="Starting_Fence10" parent="Environment/Island" instance=ExtResource("4_px5de")]
-transform = Transform3D(0.788451, 0, 0.615097, 0, 1, 0, -0.615097, 0, 0.788451, 6.99471, 17, -13.7726)
-
-[node name="Starting_Fence11" parent="Environment/Island" instance=ExtResource("4_px5de")]
-transform = Transform3D(0.119131, 0, 0.992878, 0, 1, 0, -0.992878, 0, 0.119131, 4.02124, 17, -8.74728)
-
-[node name="Starting_Fence12" parent="Environment/Island" instance=ExtResource("4_px5de")]
-transform = Transform3D(0.119131, 0, 0.992878, 0, 1, 0, -0.992878, 0, 0.119131, 3.78298, 17, -6.76153)
+[node name="Teleporter" parent="Environment" node_paths=PackedStringArray("menuHandler") instance=ExtResource("11_t553c")]
+transform = Transform3D(-4.2222e-08, 0.258819, 0.965926, 1.13133e-08, 0.965926, -0.258819, -1, 0, -4.37114e-08, 17.9085, 53, 3.29135)
+menuHandler = NodePath("../../MenuHandler")
 
 [node name="Enemies" type="Node" parent="."]
 
+[node name="Starting Sign" parent="Enemies" instance=ExtResource("11_djw4k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 17.7, -11)
+signText = "Congratulations on mastering all of the abilities!"
+
 [node name="Starting Cobble" parent="Enemies" instance=ExtResource("7_6je5k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 19, -0.520237)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 19, -0.500963)
 
 [node name="Starting Anchor1" parent="Enemies" instance=ExtResource("6_6w0gh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 25, -5)
@@ -103,6 +86,39 @@ entityTarget = NodePath("../../Player")
 [node name="Mushroom6" parent="Enemies" node_paths=PackedStringArray("entityTarget") instance=ExtResource("13_bdfe3")]
 transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -14.7913, 24, -20.3143)
 entityTarget = NodePath("../../Player")
+
+[node name="Puzzle Anchor1" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 28, -8)
+
+[node name="Puzzle Cobble1" parent="Enemies" instance=ExtResource("7_6je5k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 33, -6)
+
+[node name="Puzzle Cobble2" parent="Enemies" instance=ExtResource("7_6je5k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 50, -1)
+
+[node name="Puzzle Anchor2" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 31, -15)
+
+[node name="Puzzle Anchor3" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 46.7385, -7)
+
+[node name="Puzzle Anchor5" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 52.7385, -11)
+
+[node name="Puzzle Anchor4" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.2939, 37, -12)
+
+[node name="Boss Sign" parent="Enemies" instance=ExtResource("11_djw4k")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6, 52.7, 3)
+signText = "The Boss isn't in today!\\n--\\nBut they did leave their\\n'Credits Teleporter' device (Whatever that means) just ahead..."
+
+[node name="Teleporter Anchor" parent="Enemies" instance=ExtResource("11_xtaxp")]
+transform = Transform3D(-4.22219e-08, 0.258819, 0.965926, 1.13133e-08, 0.965926, -0.258819, -1, -2.66453e-15, -4.37114e-08, 17.9085, 53, 3.29135)
+collision_mask = 0
+movementUseMovement = false
+movementUseGravity = false
+combatInvincible = true
+combatUseKnockback = false
 
 [node name="ResetPoints" type="Node" parent="."]
 

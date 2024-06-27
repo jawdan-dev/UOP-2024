@@ -736,7 +736,7 @@ collision_layer = 1
 combatTotalHealth = 2
 animationOrigin = NodePath("Mushroom")
 animationPlayer = NodePath("Mushroom/AnimationPlayer")
-entityType = 1
+entityType = 2
 iFrameMesh = NodePath("Mushroom/MushroomArm/Skeleton3D/Mushroom")
 iFrameTimeOnHit = 2.0
 
