@@ -53,6 +53,7 @@ var combatKnockback : Vector3 = Vector3.ZERO;
 var entityIgnoreGround : bool = false;
 var entityIgnoreGroundCooldown : float = 0.0;
 var ignoreDamageTimer = 0.0;
+var canDive : bool = true;
 
 enum PlayerState {
 	PlayerState_Moving, 
@@ -94,10 +95,23 @@ func _physics_process(delta):
 					iFrameTimeRemaining = 1.0;
 					pass;
 			
+			if (!canDive && is_on_floor()):
+				canDive = true;
 			# Combat scuff.
-			if (Input.is_action_just_pressed("player_combat_dive") && activeCombatEntity != null):
-				playerState = PlayerState.PlayerState_Combat_Diving;
-				
+			#if (Input.is_action_just_pressed("player_combat_dive") && activeCombatEntity != null):
+			if (Input.is_action_just_pressed("player_combat_dive") && !is_on_floor() && canDive):
+				if (activeCombatEntity == null):
+					#no enemy found so we gonna birth one
+					var movement : Vector3 = -(forwardMovement + sideMovement)
+					if movement.length_squared() > 0:
+						$VirtualEnemy.position = (movement).normalized()* 69
+						activeCombatEntity = $VirtualEnemy
+						entityIgnoreGround = true;
+						entityIgnoreGroundCooldown = 0.5;
+						canDive = false;
+						playerState = PlayerState.PlayerState_Combat_Diving;
+				else:
+					playerState = PlayerState.PlayerState_Combat_Diving;
 			# Rotate towards momentum.
 			if (animationOrigin && movementMomentum.length_squared() > 0): animationOrigin.look_at(animationOrigin.global_position - movementMomentum);
 			# Base animation.
@@ -134,7 +148,7 @@ func _physics_process(delta):
 			if (animationAirObject && !animationAirObject.visible): animationAirObject.visible = true;
 			if (animationOrigin): animationOrigin.look_at(animationOrigin.global_position - (activeCombatEntity.global_position - animationOrigin.global_position));
 			
-			# Check if tar
+			# Check if target hit
 			if (hitEntity):
 				# Attack finished.
 				playerState = PlayerState.PlayerState_Moving;
@@ -146,6 +160,7 @@ func _physics_process(delta):
 				movementMomentum = Vector3(reverseAction.x, 0, reverseAction.z);
 				totalMovement = movementMomentum + verticalMovement + combatKnockback
 				
+				
 				# Entity knockback.
 				hitEntity.set("combatKnockback", hitEntity.get("combatKnockback") + -reverseAction + Vector3(0, 2, 0));
 				hitEntity.call("_onDamageHit", 1);
@@ -154,12 +169,13 @@ func _physics_process(delta):
 				if (entityIgnoreGround && entityIgnoreGroundCooldown - delta < 0):
 					playerState = PlayerState.PlayerState_Moving;
 					entityIgnoreGround = false;
+					movementGravity = 0;
 				elif ((is_on_floor() || is_on_wall() || is_on_ceiling()) && !entityIgnoreGround):
 					entityIgnoreGround = true;
-					entityIgnoreGroundCooldown = 0.5;
+					entityIgnoreGroundCooldown = 0.35;
 					
-				if (entityIgnoreGroundCooldown > 0 && (is_on_floor() || is_on_wall() || is_on_ceiling())): entityIgnoreGroundCooldown -= delta;
-					
+				if (entityIgnoreGroundCooldown > 0 ): entityIgnoreGroundCooldown -= delta;
+				
 				# Move towards target.
 				totalMovement = (dif / len) * combatDiveSpeed;
 	
@@ -378,7 +394,7 @@ func handleCombat(delta):
 
 func updateCombatMark(delta):
 	# Handle mark.
-	if (!activeCombatEntity):
+	if (!activeCombatEntity || activeCombatEntity == $VirtualEnemy):
 		$CombatMark.visible = false;
 	else:
 		$CombatMark.visible = true;

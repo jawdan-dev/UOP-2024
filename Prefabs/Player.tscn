@@ -1216,5 +1216,7 @@ fixed_size = true
 texture_filter = 0
 texture = ExtResource("3_rd04c")
 
+[node name="VirtualEnemy" type="Node3D" parent="."]
+
 [connection signal="area_entered" from="HitBox" to="." method="_onEntityHit"]
 [connection signal="area_exited" from="HitBox" to="." method="_onEntityUnhit"]
