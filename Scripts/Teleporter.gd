@@ -4,4 +4,3 @@ extends Node3D
 func onTeleport(body : Node3D):
 	if (menuHandler):
 		menuHandler.call("gotoCredits");
-	pass;

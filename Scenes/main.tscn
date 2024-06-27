@@ -24,8 +24,10 @@ current = true
 
 [node name="Player" parent="." node_paths=PackedStringArray("cameraObject", "combatEntitiesList", "resetPoints") instance=ExtResource("2_1uq5u")]
 transform = Transform3D(-0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, -0.965926, 13, 18, -5)
+movementFactorGround = 16.0
 cameraObject = NodePath("../PlayerCamera")
 combatEntitiesList = NodePath("../Enemies")
+combatLookingDotThreshold = 0.8
 resetPoints = NodePath("../ResetPoints")
 
 [node name="PlayerCamera" type="Node3D" parent="."]
@@ -100,7 +102,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 50, -1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 31, -15)
 
 [node name="Puzzle Anchor3" parent="Enemies" instance=ExtResource("6_6w0gh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 46.7385, -7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 45.3682, -7)
 
 [node name="Puzzle Anchor5" parent="Enemies" instance=ExtResource("6_6w0gh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 52.7385, -11)

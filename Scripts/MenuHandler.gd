@@ -9,6 +9,8 @@ var cameraMix : float = 0.0;
 @export var lerpCameraSpeedTo : float = 2;
 @export var lerpCameraSpeedFrom : float = 10;
 
+@export var resetScene : PackedScene;
+
 var menuState : MenuState = MenuState.MenuState_Menu;
 enum MenuState {
 	MenuState_None,
@@ -41,7 +43,8 @@ func _process(delta):
 			$Credits.visible = true;
 			GameState.gameActive = false;			
 			if (Input.is_action_just_pressed("player_combat_dive") || Input.is_action_just_pressed("player_movement_jump")):
-				get_tree().reload_current_scene();
+				if (resetScene):
+					get_tree().change_scene_to_packed(resetScene);
 			
 	
 	# Rotation bby.

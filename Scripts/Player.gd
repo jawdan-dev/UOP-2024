@@ -209,6 +209,11 @@ func _physics_process(delta):
 	# Manual player reset.
 	if (Input.is_action_just_pressed("player_reset")):
 		resetPlayer();
+	if (Input.is_action_just_pressed("config_fullscreen")):
+		if (DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_FULLSCREEN):
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN);
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED);
 	
 	# IDK, magic i guess.
 	handleIFrames(delta);
@@ -237,6 +242,8 @@ func handleIFrames(delta):
 
 ################################################################################
 
+var invertedMouseY : bool = false;
+var invertedMouseX : bool = false;
 func handleCamera(delta):
 	if (!GameState.gameActive): return;
 	
@@ -245,6 +252,10 @@ func handleCamera(delta):
 		Input.get_axis("player_camera_right", "player_camera_left"),
 		Input.get_axis("player_camera_up", "player_camera_down") # TODO: Inverted view axis.
 	);
+	if (Input.is_action_just_pressed("config_invert_mouse_y")): invertedMouseY = !invertedMouseY;
+	if (Input.is_action_just_pressed("config_invert_mouse_x")): invertedMouseX = !invertedMouseX;
+	if (invertedMouseY): cameraInput.y *= -1;
+	if (invertedMouseX): cameraInput.x *= -1;
 	
 	# Move camera.
 	cameraAngle += cameraInput * delta * cameraLookSpeed;

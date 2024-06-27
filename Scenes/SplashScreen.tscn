@@ -1,0 +1,88 @@
+[gd_scene load_steps=13 format=3 uid="uid://dnjbqtnhf5gpw"]
+
+[ext_resource type="Script" path="res://Scripts/SplashScreen.gd" id="1_8o6rb"]
+[ext_resource type="Texture2D" uid="uid://b6wjf76d2a4g4" path="res://Textures/JamLogo.png" id="1_p8vpm"]
+[ext_resource type="PackedScene" uid="uid://qtc4v6o55otl" path="res://Scenes/Main.tscn" id="2_5is2g"]
+[ext_resource type="Texture2D" uid="uid://bclxch05n0tkm" path="res://Textures/CucumberLogo.png" id="2_s0tvs"]
+[ext_resource type="Shader" path="res://Shaders/Wobbly.gdshader" id="3_1w5l4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jtb0o"]
+shader = ExtResource("3_1w5l4")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hky4j"]
+atlas = ExtResource("2_s0tvs")
+region = Rect2(0, 0, 640, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yxroj"]
+atlas = ExtResource("2_s0tvs")
+region = Rect2(640, 0, 640, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t1r54"]
+atlas = ExtResource("2_s0tvs")
+region = Rect2(1280, 0, 640, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a3vmc"]
+atlas = ExtResource("2_s0tvs")
+region = Rect2(1920, 0, 640, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p3efg"]
+atlas = ExtResource("2_s0tvs")
+region = Rect2(2560, 0, 640, 360)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1ttpt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hky4j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yxroj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t1r54")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a3vmc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p3efg")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="SplashScreen" type="Control" node_paths=PackedStringArray("splashList")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8o6rb")
+nextScene = ExtResource("2_5is2g")
+splashTime = 3.0
+splashList = NodePath("SplashList")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2, 0, 0.266667, 1)
+
+[node name="SplashList" type="Node" parent="."]
+
+[node name="Jam" type="Sprite2D" parent="SplashList"]
+material = SubResource("ShaderMaterial_jtb0o")
+position = Vector2(320, 180)
+texture = ExtResource("1_p8vpm")
+
+[node name="Cucumber" type="AnimatedSprite2D" parent="SplashList"]
+visible = false
+position = Vector2(320, 180)
+sprite_frames = SubResource("SpriteFrames_1ttpt")
+autoplay = "default"
+frame_progress = 0.387093
