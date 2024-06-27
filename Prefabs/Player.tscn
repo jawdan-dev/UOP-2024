@@ -940,15 +940,16 @@ _data = {
 [sub_resource type="SphereMesh" id="SphereMesh_c3302"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_diiu8"]
-radius = 0.444589
+radius = 0.453206
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("animationOrigin", "animationPlayer", "animationAirObject")]
-collision_layer = 257
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("animationOrigin", "animationPlayer", "animationAirObject", "iFrameMesh")]
+collision_layer = 273
 script = ExtResource("1_m82g4")
 cameraTargetOffset = Vector3(0, 0.4, 0)
 animationOrigin = NodePath("Visual")
 animationPlayer = NodePath("Visual/Player/AnimationPlayer")
 animationAirObject = NodePath("Visual/Player/Armature/Skeleton3D/Dragon/Air")
+iFrameMesh = NodePath("Visual/Player/Armature/Skeleton3D/Dragon")
 
 [node name="EnvironmentCollider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
@@ -1178,9 +1179,9 @@ bones/29/rotation = Quaternion(0.0644896, 0.328438, 0.179334, 0.925099)
 bones/29/scale = Vector3(1, 1, 1)
 
 [node name="Dragon" type="MeshInstance3D" parent="Visual/Player/Armature/Skeleton3D"]
+material_override = ExtResource("2_348gg")
 mesh = SubResource("ArrayMesh_smysp")
 skin = SubResource("Skin_oi2qk")
-surface_material_override/0 = ExtResource("2_348gg")
 
 [node name="Air" type="MeshInstance3D" parent="Visual/Player/Armature/Skeleton3D/Dragon"]
 visible = false
@@ -1199,8 +1200,8 @@ mesh = SubResource("SphereMesh_c3302")
 skeleton = NodePath("../..")
 
 [node name="HitBox" type="Area3D" parent="."]
-collision_layer = 2
-collision_mask = 0
+collision_layer = 0
+collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HitBox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
@@ -1213,3 +1214,6 @@ no_depth_test = true
 fixed_size = true
 texture_filter = 0
 texture = ExtResource("3_rd04c")
+
+[connection signal="area_entered" from="HitBox" to="." method="_onEntityHit"]
+[connection signal="area_exited" from="HitBox" to="." method="_onEntityUnhit"]

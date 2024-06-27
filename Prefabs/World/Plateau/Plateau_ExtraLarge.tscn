@@ -37,7 +37,7 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_obnb5")
 
-[node name="PlateauColumn" type="StaticBody3D"]
+[node name="PlateauExtraLarge" type="StaticBody3D"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("ConcavePolygonShape3D_04yhv")

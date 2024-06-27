@@ -41,6 +41,7 @@ var combatKnockback : Vector3 = Vector3.ZERO;
 @export var combatDiveSpeed : float = 16;
 @export var combatDiveBounceImpulse : float = 8;
 @export var combatDiveMomentumImpulse : float = 5;
+@export var combatDiveIgnoreDamageTimer : float = 0.5;
 
 @export_category("Animation")
 @export var animationOrigin : Node3D;
@@ -49,6 +50,9 @@ var combatKnockback : Vector3 = Vector3.ZERO;
 
 @export_category("Other")
 @export var resetPoints : Node;
+var entityIgnoreGround : bool = false;
+var entityIgnoreGroundCooldown : float = 0.0;
+var ignoreDamageTimer = 0.0;
 
 enum PlayerState {
 	PlayerState_Moving, 
@@ -60,7 +64,7 @@ func _ready():
 		rp.visible = false;	
 
 var playerState : PlayerState = PlayerState.PlayerState_Moving;
-var hitEntity : Node3D = null;
+
 func _physics_process(delta):
 	# Handle gravity.
 	handleGravity(delta);
@@ -68,22 +72,38 @@ func _physics_process(delta):
 	handleMovement(delta);
 	# Handle momentum.
 	handleMomentum(delta);
-	# Hanlde knockback.
+	# Handle knockback.
 	handleKnockback(delta);
 	
+	# IDK, magic i guess.
+	handleIFrames(delta);
+	if (ignoreDamageTimer > 0.0): ignoreDamageTimer -= delta;
+
+	# Handle entity buffering.
+	if (hitBuffer.size() > 0 && hitEntity == null):
+		hitEntity = hitBuffer.pop_front();
+
 	var totalMovement : Vector3 = movementMomentum + verticalMovement + combatKnockback
 	match (playerState): 
 		PlayerState.PlayerState_Moving: 
 			# Handle combat.
 			handleCombat(delta);
 			
+			# Contact damage.
+			if (hitEntity != null && ignoreDamageTimer <= 0.0):
+				var damage : float = hitEntity.get("combatContactDamage");
+				if (damage > 0):
+					var knockbackDirection : Vector3 = hitEntity.global_position.direction_to(global_position) * 10.0;
+					combatKnockback = Vector3(knockbackDirection.x, 2.0, knockbackDirection.z);
+					iFrameTimeRemaining = 1.0;
+					pass;
+			
 			# Combat scuff.
 			if (Input.is_action_just_pressed("player_combat_dive") && activeCombatEntity != null):
 				playerState = PlayerState.PlayerState_Combat_Diving;
-				hitEntity = null;
 				
 			# Rotate towards momentum.
-			if (animationOrigin): animationOrigin.look_at(animationOrigin.global_position - movementMomentum);
+			if (animationOrigin && movementMomentum.length_squared() > 0): animationOrigin.look_at(animationOrigin.global_position - movementMomentum);
 			# Base animation.
 			if (verticalMovement.y != 0):
 				playAnimation("Air");
@@ -102,8 +122,11 @@ func _physics_process(delta):
 			if (animationAirObject && animationAirObject.visible): animationAirObject.visible = false;
 			
 		PlayerState.PlayerState_Combat_Diving: 
+			ignoreDamageTimer = combatDiveIgnoreDamageTimer;
+			
 			if (!activeCombatEntity):
 				playerState = PlayerState.PlayerState_Moving;
+				entityIgnoreGround = false;
 				return;
 			
 			# Get target distance stuff.
@@ -130,11 +153,16 @@ func _physics_process(delta):
 				hitEntity.set("combatKnockback", hitEntity.get("combatKnockback") + -reverseAction + Vector3(0, 2, 0));
 				hitEntity.call("_onDamageHit", 1);
 				
-				# Reset.
-				hitEntity = null;
-			elif (is_on_floor() || is_on_wall() || is_on_ceiling()):
-				playerState = PlayerState.PlayerState_Moving;
 			else:
+				if (entityIgnoreGround && entityIgnoreGroundCooldown - delta < 0):
+					playerState = PlayerState.PlayerState_Moving;
+					entityIgnoreGround = false;
+				elif ((is_on_floor() || is_on_wall() || is_on_ceiling()) && !entityIgnoreGround):
+					entityIgnoreGround = true;
+					entityIgnoreGroundCooldown = 0.5;
+					
+				if (entityIgnoreGroundCooldown > 0 && (is_on_floor() || is_on_wall() || is_on_ceiling())): entityIgnoreGroundCooldown -= delta;
+					
 				# Move towards target.
 				totalMovement = (dif / len) * combatDiveSpeed;
 	
@@ -151,6 +179,27 @@ func _physics_process(delta):
 	# Manual player reset.
 	if (Input.is_action_just_pressed("player_reset")):
 		resetPlayer();
+
+################################################################################
+
+@export_category("iFrames")
+@export var iFrameMesh : MeshInstance3D;
+var iFrameShader : Shader = preload("res://Shaders/WorldShaderIFrame.gdshader");
+var iFrameTimeRemaining : float = 0.0;
+var baseShader : Shader;
+func handleIFrames(delta):
+	if (!iFrameMesh || !iFrameShader): return;
+	# Get material.
+	var mat : ShaderMaterial = iFrameMesh.material_override as ShaderMaterial;
+	if (!mat): return;
+	
+	if (iFrameTimeRemaining > 0):
+		iFrameTimeRemaining -= delta;
+		if (mat.shader != iFrameShader):
+			baseShader = mat.shader;
+			mat.shader = iFrameShader;
+	elif (mat.shader == iFrameShader):
+			mat.shader = baseShader;	
 
 ################################################################################
 
@@ -231,7 +280,7 @@ func handleGravity(delta):
 	var gravityFactor : float = movementGravityAcceleration * 0.5 * delta;
 	
 	# Handle floor factor.
-	if (is_on_floor()): 
+	if (is_on_floor() && movementGravity <= 0): 
 		movementTimeSinceLastGrounded = 0.0;
 		movementGravity = 0.0;
 		gravityFactor = 0.0;
@@ -269,7 +318,9 @@ func handleGravity(delta):
 ################################################################################
 
 func handleKnockback(delta): 
+	var grounded : bool = is_on_floor();
 	combatKnockback = combatKnockback.move_toward(Vector3.ZERO, combatKnockbackDampening * delta);
+	if (grounded): combatKnockback.y = 0;
 
 var activeCombatEntity : Node3D;
 func handleCombat(delta): 
@@ -325,8 +376,26 @@ func updateCombatMark(delta):
 		$CombatMark.visible = true;
 		$CombatMark.global_position = activeCombatEntity.global_position;
 
-func _onEntityHit(entity : Node3D):
-	hitEntity = entity;
+var hitEntity : Node3D = null;
+var hitBuffer : Array[Node3D] = [];
+func _onEntityHit(e : Node3D):
+	var entity : Node3D = e.get_parent();
+	
+	if (hitEntity == null):
+		hitEntity = entity;
+	else:
+		hitBuffer.push_back(entity);
+
+func _onEntityUnhit(e : Node3D):
+	var entity : Node3D = e.get_parent();
+	
+	if (hitEntity == entity):
+		hitEntity = null;
+		return;
+		
+	var idx : int = hitBuffer.find(entity);
+	if (idx != -1):
+		hitBuffer.remove_at(idx);
 
 ################################################################################
 

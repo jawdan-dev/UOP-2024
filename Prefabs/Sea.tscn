@@ -38,6 +38,8 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_0rwcb")
 
 [node name="Sea" type="Area3D"]
+collision_layer = 0
+collision_mask = 16
 script = ExtResource("1_vw8nn")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

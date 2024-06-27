@@ -41,11 +41,14 @@ shadow_mesh = SubResource("ArrayMesh_bqq84")
 [sub_resource type="BoxShape3D" id="BoxShape3D_e3103"]
 size = Vector3(2, 2, 2)
 
-[node name="Cobble" instance=ExtResource("1_835kq")]
+[node name="Cobble" node_paths=PackedStringArray("iFrameMesh") instance=ExtResource("1_835kq")]
 collision_layer = 1
 movementUseMovement = false
 movementUseGravity = false
+combatContactDamage = 0
 combatUseKnockback = false
+iFrameMesh = NodePath("Visual/Cobble")
+iFrameTimeOnHit = 0.5
 
 [node name="EnvironmentCollider" parent="." index="0"]
 shape = SubResource("BoxShape3D_mleba")
@@ -53,15 +56,13 @@ shape = SubResource("BoxShape3D_mleba")
 [node name="Visual" type="Node3D" parent="." index="1"]
 
 [node name="Cobble" type="MeshInstance3D" parent="Visual" index="0"]
+material_override = ExtResource("2_kvxw1")
 mesh = SubResource("ArrayMesh_l34w6")
 skeleton = NodePath("")
-surface_material_override/0 = ExtResource("2_kvxw1")
 
 [node name="Hurtbox" type="Area3D" parent="." index="2"]
-collision_layer = 0
-collision_mask = 2
+collision_layer = 2
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox" index="0"]
 shape = SubResource("BoxShape3D_e3103")
-
-[connection signal="area_entered" from="Hurtbox" to="." method="_onPlayerHit"]

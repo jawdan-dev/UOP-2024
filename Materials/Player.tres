@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cyxec0mix8t6t" path="res://Textures/Player.png" id="2_ss642"]
 
 [resource]
+resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_wic88")
 shader_parameter/text = ExtResource("2_ss642")
