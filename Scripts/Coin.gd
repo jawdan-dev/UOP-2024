@@ -45,4 +45,9 @@ func _process(delta):
 
 var collected : bool = false;
 func _onPlayerEnter(body : Node3D):
+	if collected:
+		return;
 	collected = true;
+	$CoinGrabSound.pitch_scale = randf_range(0.9, 1.2)
+	$CoinGrabSound.play()
+	

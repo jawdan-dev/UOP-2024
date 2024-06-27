@@ -1,9 +1,13 @@
-[gd_scene load_steps=19 format=3 uid="uid://dn0hgnaquqf5p"]
+[gd_scene load_steps=23 format=3 uid="uid://dn0hgnaquqf5p"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_m82g4"]
 [ext_resource type="Material" uid="uid://ccb67kigpcsid" path="res://Materials/Player.tres" id="2_348gg"]
 [ext_resource type="Material" uid="uid://djf2heslo2vew" path="res://Materials/Air.tres" id="3_n3kvv"]
 [ext_resource type="Texture2D" uid="uid://hifqcabfopkd" path="res://Textures/CombatMark.png" id="3_rd04c"]
+[ext_resource type="AudioStream" uid="uid://dogu3aoxeasu1" path="res://Audio/dive3.wav" id="5_mdshl"]
+[ext_resource type="AudioStream" uid="uid://dxhjsssumn1kt" path="res://Audio/splash4.wav" id="6_6txuk"]
+[ext_resource type="AudioStream" uid="uid://dx6uep5inh7pb" path="res://Audio/bounce.wav" id="7_5uam4"]
+[ext_resource type="AudioStream" uid="uid://c4ad1be2qcmdi" path="res://Audio/bounce2.wav" id="8_brh88"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_qfg5b"]
 radius = 0.4
@@ -1213,6 +1217,22 @@ texture_filter = 0
 texture = ExtResource("3_rd04c")
 
 [node name="VirtualEnemy" type="Node3D" parent="."]
+
+[node name="DiveSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_mdshl")
+pitch_scale = 1.76
+
+[node name="SplashSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_6txuk")
+volume_db = -10.0
+
+[node name="Bounce1Sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_5uam4")
+volume_db = -12.0
+
+[node name="Bounce2Sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_brh88")
+volume_db = -12.0
 
 [connection signal="area_entered" from="HitBox" to="." method="_onEntityHit"]
 [connection signal="area_exited" from="HitBox" to="." method="_onEntityUnhit"]

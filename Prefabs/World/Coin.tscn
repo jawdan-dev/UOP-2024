@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://tludh3giqfj8"]
+[gd_scene load_steps=8 format=3 uid="uid://tludh3giqfj8"]
 
 [ext_resource type="Script" path="res://Scripts/Coin.gd" id="1_bcu6j"]
 [ext_resource type="Material" uid="uid://ds43d8ak37w2k" path="res://Materials/Coin.tres" id="2_epxdi"]
+[ext_resource type="AudioStream" uid="uid://1mh55pg2j2ag" path="res://Audio/coinpickup.wav" id="3_4oc2f"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j12e4"]
 
@@ -56,5 +57,9 @@ surface_material_override/0 = ExtResource("2_epxdi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
 shape = SubResource("CylinderShape3D_r4umg")
+
+[node name="CoinGrabSound" type="AudioStreamPlayer" parent="Body"]
+stream = ExtResource("3_4oc2f")
+volume_db = -15.0
 
 [connection signal="body_entered" from="Body" to="Body" method="_onPlayerEnter"]

@@ -114,8 +114,12 @@ func _physics_process(delta):
 						entityIgnoreGroundCooldown = 0.5;
 						canDive = false;
 						playerState = PlayerState.PlayerState_Combat_Diving;
+						$DiveSound.pitch_scale = randf_range(1.6, 2)
+						$DiveSound.play()
 				else:
 					playerState = PlayerState.PlayerState_Combat_Diving;
+					$DiveSound.pitch_scale = randf_range(1.6, 2)
+					$DiveSound.play()
 			# Rotate towards momentum.
 			if (animationOrigin && movementMomentum.length_squared() > 0): animationOrigin.look_at(animationOrigin.global_position - movementMomentum);
 			# Base animation.
@@ -152,7 +156,7 @@ func _physics_process(delta):
 			if (animationAirObject && !animationAirObject.visible): animationAirObject.visible = true;
 			if (animationOrigin): animationOrigin.look_at(animationOrigin.global_position - (activeCombatEntity.global_position - animationOrigin.global_position));
 			
-			# Check if target hit
+			# Check if target hit.
 			if (hitEntity):
 				# Attack finished.
 				playerState = PlayerState.PlayerState_Moving;
@@ -164,7 +168,14 @@ func _physics_process(delta):
 				movementMomentum = Vector3(reverseAction.x, 0, reverseAction.z) * combatDiveMomentumImpulse;
 				totalMovement = movementMomentum + verticalMovement + combatKnockback
 				
-				
+				#play Dan's fantastic noise that he made
+				#aww thanks jordan
+				if randf() > 0.5:
+					$Bounce1Sound.pitch_scale = randf_range(0.9, 1.2);
+					$Bounce1Sound.play()
+				else:
+					$Bounce2Sound.pitch_scale = randf_range(0.9, 1.2);
+					$Bounce2Sound.play()
 				# Entity knockback.
 				hitEntity.set("combatKnockback", hitEntity.get("combatKnockback") + -(Vector3(reverseAction.x, 0, reverseAction.z).normalized() * combatDiveMomentumImpulse) + Vector3(0, 2, 0));
 				hitEntity.call("_onDamageHit", 1);
@@ -509,7 +520,7 @@ func resetPlayer():
 	
 	if (playerState == PlayerState.PlayerState_Combat_Diving):
 		entityIgnoreGround = true;
-	
+	$SplashSound.play()
 	global_position = lastValidResetPoint;
 
 ################################################################################
