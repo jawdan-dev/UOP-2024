@@ -26,7 +26,7 @@ var movementGravity : float = 0;
 @export var cameraTargetOffset : Vector3 = Vector3.ZERO;
 @export var cameraLookSpeed : float = 2.0;
 @export var cameraDistance : float = 2.5;
-var cameraAngle : Vector2 = Vector2.ZERO;
+var cameraAngle : Vector2 = Vector2(TAU * 0.5, 0);
 
 @export_category("Combat")
 # Entity target selection.
@@ -75,10 +75,6 @@ func _physics_process(delta):
 	# Handle knockback.
 	handleKnockback(delta);
 	
-	# IDK, magic i guess.
-	handleIFrames(delta);
-	if (ignoreDamageTimer > 0.0): ignoreDamageTimer -= delta;
-
 	# Handle entity buffering.
 	if (hitBuffer.size() > 0 && hitEntity == null):
 		hitEntity = hitBuffer.pop_front();
@@ -142,6 +138,7 @@ func _physics_process(delta):
 			if (hitEntity):
 				# Attack finished.
 				playerState = PlayerState.PlayerState_Moving;
+				# TODO: Reset player direction to be straight...
 				
 				# Bounce off of enemy.
 				movementGravity = combatDiveBounceImpulse;
@@ -175,10 +172,17 @@ func _physics_process(delta):
 	
 	# Update combat mark.
 	updateCombatMark(delta);
+	
+	# Reset point updating.
+	handleResetPoint(delta);
 
 	# Manual player reset.
 	if (Input.is_action_just_pressed("player_reset")):
 		resetPlayer();
+	
+	# IDK, magic i guess.
+	handleIFrames(delta);
+	if (ignoreDamageTimer > 0.0): ignoreDamageTimer -= delta;
 
 ################################################################################
 
@@ -282,6 +286,10 @@ func handleGravity(delta):
 	# Handle floor factor.
 	if (is_on_floor() && movementGravity <= 0): 
 		movementTimeSinceLastGrounded = 0.0;
+		movementGravity = 0.0;
+		gravityFactor = 0.0;
+		
+	if (is_on_ceiling() && movementGravity > 0):
 		movementGravity = 0.0;
 		gravityFactor = 0.0;
 	
@@ -437,12 +445,15 @@ func setAnimationSpeed(percentage : float):
 	
 ################################################################################
 	
-func resetPlayer():
-	# TODO: Deal damage here.
-	
-	# Find closest reset point.
+@onready var lastValidResetPoint : Vector3 = global_position;
+func handleResetPoint(delta):
 	if (!resetPoints): return; # Handle this case?
 	
+	# Check if fully grounded.
+	if (!is_on_floor() || movementGravity > 0): return;
+	
+	
+	# Find closest reset point.
 	var bestDist : float = INF;
 	var bestPoint : Node3D = null;
 	for rp in resetPoints.get_children():
@@ -453,7 +464,16 @@ func resetPlayer():
 			bestPoint = point;
 			bestDist = dist;
 	
+	# Update last reset point.
 	if (bestPoint):
-		global_position = bestPoint.global_position;
+		lastValidResetPoint = bestPoint.global_position;
+
+func resetPlayer():
+	# TODO: Deal damage here.
+	
+	if (playerState == PlayerState.PlayerState_Combat_Diving):
+		entityIgnoreGround = true;
+	
+	global_position = lastValidResetPoint;
 
 ################################################################################

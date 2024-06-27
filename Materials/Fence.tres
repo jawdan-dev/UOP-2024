@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://bbrdyw8glmvwt"]
+
+[ext_resource type="Shader" path="res://Shaders/WorldShader.gdshader" id="1_pc146"]
+[ext_resource type="Texture2D" uid="uid://b0xnbq1pbdj16" path="res://Textures/Fence.png" id="2_1ff2h"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_pc146")
+shader_parameter/text = ExtResource("2_1ff2h")

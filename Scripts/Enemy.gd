@@ -54,9 +54,6 @@ func _physics_process(delta):
 	handleMomentum(delta);
 	totalMovement += movementMomentum;
 	
-	# ??
-	handleIFrames(delta);
-	
 	# Handle entity brain.
 	if (entityTarget):
 		var targetDistance : float = global_position.distance_to(entityTarget.global_position);
@@ -70,7 +67,8 @@ func _physics_process(delta):
 					
 				if (combatTotalHealth <= 0):
 					# Sit.
-					playAnimation("Mushroom_Sit");
+					playAnimation("Mushroom_Fell");
+					horizontalMovement = Vector3.ZERO;
 				elif (iFrameTimeRemaining > 0):
 					# Ouchies.
 					playAnimation("Mushroom_Fell");					
@@ -89,6 +87,9 @@ func _physics_process(delta):
 	if (movementUseMovement && combatTotalHealth > 0):
 		velocity = totalMovement;	
 		move_and_slide();
+		
+	# ??
+	handleIFrames(delta);
 	
 ################################################################################
 

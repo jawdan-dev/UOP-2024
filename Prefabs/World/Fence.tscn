@@ -1,0 +1,62 @@
+[gd_scene load_steps=6 format=3 uid="uid://criidol8ceupp"]
+
+[ext_resource type="Material" uid="uid://bbrdyw8glmvwt" path="res://Materials/Fence.tres" id="1_ys1jh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_60kxt"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_0rwcb"]
+_surfaces = [{
+"aabb": AABB(-4, 0.025, -4, 8, 1.00005e-05, 8.00001),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 3, 0, 1, 0, 0, 0, 2, 0, 3, 0),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 254, 255, 0, 0, 255, 255, 0, 0, 254, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_c6ihe"]
+resource_name = "Decal_Plane_004"
+_surfaces = [{
+"aabb": AABB(-4, 0.025, -4, 8, 1.00005e-05, 8.00001),
+"attribute_data": PackedByteArray(255, 255, 255, 127, 255, 127, 255, 127, 254, 255, 255, 255, 255, 127, 254, 255),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 3, 0, 1, 0, 0, 0, 2, 0, 3, 0),
+"material": SubResource("StandardMaterial3D_60kxt"),
+"primitive": 3,
+"uv_scale": Vector4(2, 2, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 254, 255, 255, 255, 255, 255, 0, 0, 254, 255, 255, 255, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 127, 255, 191, 255, 127, 255, 191, 255, 127, 255, 191, 255, 127, 255, 191)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_0rwcb")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_x80c5"]
+data = PackedVector3Array(-4, 0.025, 3.9999, 4, 0.025, -4, 4, 0.025, 3.9999, -4, 0.025, 3.9999, -4, 0.025, -4, 4, 0.025, -4)
+
+[node name="Fence" type="Node3D"]
+
+[node name="Plane" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.25, 2.18557e-08, 9.55343e-16, 0, -1.09278e-08, 0.25, 2.18557e-08, 0.25, 1.09278e-08, 0, 1, 0)
+material_override = ExtResource("1_ys1jh")
+mesh = SubResource("ArrayMesh_c6ihe")
+skeleton = NodePath("")
+
+[node name="Plane2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, 0.25, 0, -0.25, -1.09278e-08, 0, 1, 0)
+material_override = ExtResource("1_ys1jh")
+mesh = SubResource("ArrayMesh_c6ihe")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(-0.25, 2.18557e-08, 9.55343e-16, 0, -1.09278e-08, 0.25, 2.18557e-08, 0.25, 1.09278e-08, 0, 1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_x80c5")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(-1, -8.74228e-08, -3.82137e-15, 8.74228e-08, -1, -8.74228e-08, 3.82137e-15, -8.74228e-08, 1, 0, 0, 0)
+shape = SubResource("ConcavePolygonShape3D_x80c5")
