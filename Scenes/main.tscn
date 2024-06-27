@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://qtc4v6o55otl"]
+[gd_scene load_steps=14 format=3 uid="uid://qtc4v6o55otl"]
 
 [ext_resource type="Environment" uid="uid://crsf8smolp8au" path="res://Environments/Main.tres" id="1_82l0s"]
 [ext_resource type="PackedScene" uid="uid://dn0hgnaquqf5p" path="res://Prefabs/Player.tscn" id="2_1uq5u"]
 [ext_resource type="PackedScene" uid="uid://i0bq7lqkmlwi" path="res://Prefabs/MenuHandler.tscn" id="3_cygst"]
 [ext_resource type="PackedScene" uid="uid://byka7yi21wqgr" path="res://Prefabs/Sea.tscn" id="3_skm36"]
+[ext_resource type="PackedScene" uid="uid://dnjbqtnhf5gpw" path="res://Scenes/SplashScreen.tscn" id="4_j1tjx"]
 [ext_resource type="PackedScene" uid="uid://cl2wi0vttovcp" path="res://Prefabs/Enemies/Anchor.tscn" id="6_6w0gh"]
 [ext_resource type="PackedScene" uid="uid://bibf351mxdkt2" path="res://Prefabs/Enemies/Cobble.tscn" id="7_6je5k"]
 [ext_resource type="PackedScene" uid="uid://hah66rs0h6u1" path="res://Prefabs/Enemies/Sign.tscn" id="11_djw4k"]
@@ -36,6 +37,7 @@ resetPoints = NodePath("../ResetPoints")
 cameraObject = NodePath("../MainCamera")
 cameraObjectB = NodePath("../PlayerCamera")
 lerpCamera = true
+resetScene = ExtResource("4_j1tjx")
 
 [node name="Environment" type="Node" parent="."]
 
@@ -101,6 +103,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 50, -1)
 [node name="Puzzle Anchor2" parent="Enemies" instance=ExtResource("6_6w0gh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 31, -15)
 
+[node name="Puzzle Anchor9" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.2271, 20.1827, -12.5328)
+
+[node name="Puzzle Anchor10" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.9231, 15.483, -19.9725)
+
+[node name="Puzzle Anchor11" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.4871, 11.7852, -29.188)
+
+[node name="Puzzle Anchor12" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.4871, 8.75521, -38.188)
+
 [node name="Puzzle Anchor3" parent="Enemies" instance=ExtResource("6_6w0gh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 45.3682, -7)
 
@@ -110,9 +124,26 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 52.7385, -11)
 [node name="Puzzle Anchor4" parent="Enemies" instance=ExtResource("6_6w0gh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.2939, 37, -12)
 
+[node name="Puzzle Anchor6" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29393, 27, 27)
+
+[node name="Puzzle Anchor8" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70607, 27, 22)
+
+[node name="Puzzle Anchor7" parent="Enemies" instance=ExtResource("6_6w0gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.70607, 27, 17)
+
 [node name="Boss Sign" parent="Enemies" instance=ExtResource("11_djw4k")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6, 52.7, 3)
-signText = "The Boss isn't in today!\\n--\\nBut they did leave their\\n'Credits Teleporter' device (Whatever that means) just ahead..."
+signText = "The Boss isn't in today!\\n--\\nBut they did leave their\\n'Credits Teleporter'\\n(Whatever that means)\\njust ahead..."
+
+[node name="Sign" parent="Enemies" instance=ExtResource("11_djw4k")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -25.792, 7.15691, -51.957)
+signText = "Whoa a dragon!?\\nHaven't seen one of those in a very long time...\\nHow do I see? Don't worry about it."
+
+[node name="Sign2" parent="Enemies" instance=ExtResource("11_djw4k")]
+transform = Transform3D(-0.999692, 0, 0.0247986, 0, 1, 0, -0.0247986, 0, -0.999692, -9.73336, 27.1975, 26.2224)
+signText = "Hello,\\nI'm the replayability sign.\\nJust doing my job...\\n\\nSee you around!"
 
 [node name="Teleporter Anchor" parent="Enemies" instance=ExtResource("11_xtaxp")]
 transform = Transform3D(-4.22219e-08, 0.258819, 0.965926, 1.13133e-08, 0.965926, -0.258819, -1, -2.66453e-15, -4.37114e-08, 17.9085, 53, 3.29135)
