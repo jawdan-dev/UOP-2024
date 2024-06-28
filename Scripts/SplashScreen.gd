@@ -1,7 +1,5 @@
 extends Control
 
-@export var nextScene : PackedScene;
-
 @export var splashTime : float = 1.5;
 
 @export var splashList : Node;
@@ -14,7 +12,7 @@ func _ready():
 			c.visible = false;
 
 func _process(delta):
-	if (!splashList || !nextScene): return;
+	if (!splashList): return;
 	
 	if (remainingSplash <= 0.0):
 		splashList.get_child(activeSplash).visible = false;;
@@ -24,7 +22,7 @@ func _process(delta):
 		remainingSplash -= delta;
 	
 	if (activeSplash >= splashList.get_child_count()):
-		get_tree().change_scene_to_packed(nextScene);
+		get_tree().change_scene_to_file("res://Scenes/Game.tscn");
 	else:
 		splashList.get_child(activeSplash).visible = true;
 	

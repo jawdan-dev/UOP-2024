@@ -1,8 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://dnjbqtnhf5gpw"]
+[gd_scene load_steps=12 format=3 uid="uid://dnjbqtnhf5gpw"]
 
 [ext_resource type="Script" path="res://Scripts/SplashScreen.gd" id="1_8o6rb"]
 [ext_resource type="Texture2D" uid="uid://b6wjf76d2a4g4" path="res://Textures/JamLogo.png" id="1_p8vpm"]
-[ext_resource type="PackedScene" uid="uid://qtc4v6o55otl" path="res://Scenes/Main.tscn" id="2_5is2g"]
 [ext_resource type="Texture2D" uid="uid://bclxch05n0tkm" path="res://Textures/CucumberLogo.png" id="2_s0tvs"]
 [ext_resource type="Shader" path="res://Shaders/Wobbly.gdshader" id="3_1w5l4"]
 
@@ -60,7 +59,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_8o6rb")
-nextScene = ExtResource("2_5is2g")
 splashTime = 3.0
 splashList = NodePath("SplashList")
 
