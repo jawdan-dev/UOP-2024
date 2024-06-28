@@ -11,6 +11,7 @@ script = ExtResource("1_tk3il")
 transform = Transform3D(-0.991928, 0.0301958, 0.123154, 0.00685988, 0.982589, -0.185667, -0.126616, -0.183323, -0.974865, 0, 11.1925, -69.4349)
 
 [node name="Menu" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -71,6 +72,7 @@ offset_bottom = 147.0
 texture = ExtResource("3_f36hq")
 
 [node name="Credits" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

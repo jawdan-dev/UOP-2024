@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://qtc4v6o55otl"]
+[gd_scene load_steps=15 format=3 uid="uid://qtc4v6o55otl"]
 
 [ext_resource type="Environment" uid="uid://crsf8smolp8au" path="res://Environments/Main.tres" id="1_su316"]
 [ext_resource type="PackedScene" uid="uid://dn0hgnaquqf5p" path="res://Prefabs/Player.tscn" id="2_rhsqt"]
@@ -12,8 +12,36 @@
 [ext_resource type="PackedScene" uid="uid://ddlju2aqixo8b" path="res://Prefabs/Enemies/Mushroom.tscn" id="11_6uhly"]
 [ext_resource type="PackedScene" uid="uid://bjy6lf0dsm0m4" path="res://Prefabs/Enemies/Base.tscn" id="12_8oh57"]
 [ext_resource type="PackedScene" uid="uid://dysbcmeon7mvc" path="res://Prefabs/World/ResetPoint.tscn" id="13_3haoj"]
+[ext_resource type="Script" path="res://Scripts/AutoReset.gd" id="13_xvlir"]
+[ext_resource type="Theme" uid="uid://bi3os1k1ta2ff" path="res://Themes/Theme.tres" id="14_mlk4m"]
 
 [node name="Main" type="Node3D"]
+
+[node name="AutoReset" type="CanvasLayer" parent="."]
+visible = false
+script = ExtResource("13_xvlir")
+
+[node name="ColorRect" type="ColorRect" parent="AutoReset"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -275.0
+offset_right = 275.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme = ExtResource("14_mlk4m")
+color = Color(0.666667, 0.239216, 0.364706, 1)
+
+[node name="Label" type="Label" parent="AutoReset/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Game will automatically restart in %s seconds."
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("1_su316")
