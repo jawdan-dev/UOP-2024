@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://dnjbqtnhf5gpw"]
+[gd_scene load_steps=13 format=3 uid="uid://dnjbqtnhf5gpw"]
 
 [ext_resource type="Script" path="res://Scripts/SplashScreen.gd" id="1_8o6rb"]
 [ext_resource type="Texture2D" uid="uid://b6wjf76d2a4g4" path="res://Textures/JamLogo.png" id="1_p8vpm"]
 [ext_resource type="Texture2D" uid="uid://bclxch05n0tkm" path="res://Textures/CucumberLogo.png" id="2_s0tvs"]
 [ext_resource type="Shader" path="res://Shaders/Wobbly.gdshader" id="3_1w5l4"]
+[ext_resource type="Texture2D" uid="uid://5nsfxr0ku28l" path="res://Textures/GodotLogo.png" id="4_si78t"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jtb0o"]
 shader = ExtResource("3_1w5l4")
@@ -74,9 +75,16 @@ color = Color(0.2, 0, 0.266667, 1)
 [node name="SplashList" type="Node" parent="."]
 
 [node name="Jam" type="Sprite2D" parent="SplashList"]
+visible = false
 material = SubResource("ShaderMaterial_jtb0o")
 position = Vector2(320, 180)
 texture = ExtResource("1_p8vpm")
+
+[node name="Godot" type="Sprite2D" parent="SplashList"]
+material = SubResource("ShaderMaterial_jtb0o")
+position = Vector2(320, 180)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_si78t")
 
 [node name="Cucumber" type="AnimatedSprite2D" parent="SplashList"]
 visible = false
