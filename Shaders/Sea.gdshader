@@ -1,5 +1,5 @@
 shader_type spatial;
-
+render_mode unshaded;
 
 uniform float foamScale = 20.0;
 uniform sampler2D foamShape : filter_nearest, repeat_enable;

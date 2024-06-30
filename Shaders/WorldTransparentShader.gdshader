@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode world_vertex_coords;
+render_mode unshaded, world_vertex_coords;
 
 uniform sampler2D text : source_color, filter_nearest, repeat_enable;
 

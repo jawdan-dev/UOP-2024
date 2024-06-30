@@ -1,4 +1,5 @@
 shader_type canvas_item;
+render_mode unshaded;
 
 vec2 getUVOffset(vec2 baseUV, float t) {
 	// Pirated from https://medium.com/@gordonnl/the-ocean-170fdfd659f1 -- ty MIT license <3
